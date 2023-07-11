@@ -26,6 +26,9 @@ module.exports = {
         },
         action: "#3B82F6",
       },
+      transitionProperty: {
+        width: "width",
+      },
     },
   },
   plugins: [],
