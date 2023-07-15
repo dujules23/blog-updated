@@ -2,7 +2,23 @@ import { FC } from "react";
 import { Editor } from "@tiptap/react";
 import DropdownOptions from "@/components/common/DropdownOptions";
 import { AiFillCaretDown } from "react-icons/ai";
+import { RiDoubleQuotesL } from "react-icons/ri";
+import {
+  BsTypeBold,
+  BsTypeStrikethrough,
+  BsBraces,
+  BsCode,
+  BsListOl,
+  BsListUl,
+  BsTypeItalic,
+  BsTypeUnderline,
+  BsImageFill,
+  BsLink45Deg,
+  BsYoutube,
+  BsImage,
+} from "react-icons/bs";
 import { getFocusedEditor } from "../EditorUtils";
+import Button from "@/components/common/Button";
 
 interface Props {
   editor: Editor | null;
@@ -49,9 +65,69 @@ const ToolBar: FC<Props> = ({ editor }): JSX.Element | null => {
   };
 
   return (
-    <div>
+    <div className="flex items-center">
       {/* paragraph, Heading 1, 2, 3 */}
       <DropdownOptions options={options} head={<Head />} />
+
+      <div className="h-4 w-[1px] bg-secondary-dark dark:bg-secondary-light mx-8" />
+
+      <div className="flex items-center space-x-3">
+        <Button>
+          <BsTypeBold />
+        </Button>
+
+        <Button>
+          <BsTypeItalic />
+        </Button>
+
+        <Button>
+          <BsTypeUnderline />
+        </Button>
+
+        <Button>
+          <BsTypeStrikethrough />
+        </Button>
+      </div>
+
+      <div className="h-4 w-[1px] bg-secondary-dark dark:bg-secondary-light mx-8" />
+
+      <div className="flex items-center space-x-3">
+        <Button>
+          <RiDoubleQuotesL />
+        </Button>
+
+        <Button>
+          <BsCode />
+        </Button>
+
+        <Button>
+          <BsBraces />
+        </Button>
+
+        <Button>
+          <BsLink45Deg />
+        </Button>
+
+        <Button>
+          <BsListOl />
+        </Button>
+
+        <Button>
+          <BsListUl />
+        </Button>
+      </div>
+
+      <div className="h-4 w-[1px] bg-secondary-dark dark:bg-secondary-light mx-8" />
+
+      <div className="flex items-center space-x-3">
+        <Button>
+          <BsYoutube />
+        </Button>
+
+        <Button>
+          <BsImageFill />
+        </Button>
+      </div>
     </div>
   );
 };
