@@ -19,6 +19,7 @@ import {
 } from "react-icons/bs";
 import { getFocusedEditor } from "../EditorUtils";
 import Button from "@/components/common/Button";
+import InsertLink from "../Link/InsertLink";
 
 interface Props {
   editor: Editor | null;
@@ -53,6 +54,10 @@ const ToolBar: FC<Props> = ({ editor }): JSX.Element | null => {
     if (editor.isActive("heading", { level: 3 })) return "Heading 3";
 
     return "Paragraph";
+  };
+
+  const handleLinkSubmit = (link: linkOptions) => {
+    console.log(link);
   };
 
   const Head = () => {
@@ -125,9 +130,7 @@ const ToolBar: FC<Props> = ({ editor }): JSX.Element | null => {
           <BsBraces />
         </Button>
 
-        <Button>
-          <BsLink45Deg />
-        </Button>
+        <InsertLink onSubmit={handleLinkSubmit} />
 
         <Button
           active={editor.isActive("orderedList")}
