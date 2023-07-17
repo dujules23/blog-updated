@@ -20,6 +20,7 @@ import {
 import { getFocusedEditor } from "../EditorUtils";
 import Button from "@/components/common/Button";
 import InsertLink from "../Link/InsertLink";
+import { linkOption } from "../Link/LinkForm";
 
 interface Props {
   editor: Editor | null;
@@ -56,8 +57,11 @@ const ToolBar: FC<Props> = ({ editor }): JSX.Element | null => {
     return "Paragraph";
   };
 
-  const handleLinkSubmit = (link: linkOptions) => {
-    console.log(link);
+  const handleLinkSubmit = ({ url, openInNewTab }: linkOption) => {
+    const { commands } = editor;
+    if (openInNewTab) commands.setLink({ href: url, target: "_blank" });
+    else commands.setLink({ href: url });
+    // console.log(url, openInNewTab);
   };
 
   const Head = () => {

@@ -4,6 +4,7 @@ import StarterKit from "@tiptap/starter-kit";
 import ToolBar from "./ToolBar";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
+import Link from "@tiptap/extension-link";
 
 interface Props {}
 
@@ -12,6 +13,14 @@ const Editor: FC<Props> = (props): JSX.Element => {
     extensions: [
       StarterKit,
       Underline,
+      Link.configure({
+        autolink: false,
+        linkOnPaste: false,
+        openOnClick: false,
+        HTMLAttributes: {
+          target: "",
+        },
+      }),
       Placeholder.configure({
         placeholder: "Type something",
       }),
