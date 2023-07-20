@@ -50,7 +50,7 @@ const Editor: FC<Props> = (props): JSX.Element => {
     if (editor && selectionRange) {
       editor.commands.setTextSelection(selectionRange);
     }
-  }, [editor && selectionRange]);
+  }, [editor, selectionRange]);
 
   return (
     <div className="p-3 dark:bg-primary-dark bg-primary transition">
