@@ -21,6 +21,7 @@ import { getFocusedEditor } from "../EditorUtils";
 import Button from "@/components/common/Button";
 import InsertLink from "../Link/InsertLink";
 import { linkOption } from "../Link/LinkForm";
+import EmbedYoutube from "./EmbedYoutube";
 
 interface Props {
   editor: Editor | null;
@@ -62,6 +63,10 @@ const ToolBar: FC<Props> = ({ editor }): JSX.Element | null => {
     if (openInNewTab) commands.setLink({ href: url, target: "_blank" });
     else commands.setLink({ href: url });
     // console.log(url, openInNewTab);
+  };
+
+  const handleEmbedYoutube = (url: string) => {
+    editor.chain().focus().setYoutubeVideo({ src: url }).run();
   };
 
   const Head = () => {
@@ -154,9 +159,7 @@ const ToolBar: FC<Props> = ({ editor }): JSX.Element | null => {
       <div className="h-4 w-[1px] bg-secondary-dark dark:bg-secondary-light mx-8" />
 
       <div className="flex items-center space-x-3">
-        <Button>
-          <BsYoutube />
-        </Button>
+        <EmbedYoutube onSubmit={handleEmbedYoutube} />
 
         <Button>
           <BsImageFill />
