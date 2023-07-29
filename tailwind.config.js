@@ -12,6 +12,7 @@ module.exports = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "png-pattern": "url('/empty-bg.jpg')",
       },
       colors: {
         "primary-dark": "#1f1f1f",
