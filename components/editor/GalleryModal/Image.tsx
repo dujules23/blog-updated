@@ -1,5 +1,5 @@
 import { FC } from "react";
-import NextImage from "next/image";
+import NextImage from "next/legacy/image";
 import CheckMark from "@/components/common/CheckMark";
 
 interface Props {

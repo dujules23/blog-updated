@@ -99,7 +99,7 @@ const GalleryModal: FC<Props> = ({ visible, onClose }): JSX.Element => {
           {/* image selection and upload */}
           <div className="basis-1/4">
             <div className="relative aspect-video bg-png-pattern">
-              <Image src={selectedImage} layout="fill" object-fit="contain" />
+              <Image src={selectedImage} object-fit="contain" />
             </div>
           </div>
         </div>

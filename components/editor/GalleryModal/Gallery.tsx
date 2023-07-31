@@ -25,12 +25,12 @@ const Gallery: FC<Props> = ({
       )}
       {images.map(({ src }, index) => {
         return (
-          <div key={index} className="basis-1/4 p-2">
-            {/* <Image
+          <div key={index} className="basis-[25%] p-2">
+            <Image
               src={src}
               selected={selectedImage === src}
               onClick={() => onSelect(src)}
-            /> */}
+            />
           </div>
         );
       })}
