@@ -1,5 +1,5 @@
 import ModalContainer, { ModalProps } from "@/components/common/ModalContainer";
-import { ChangeEventHandler, FC, useState } from "react";
+import { ChangeEventHandler, FC, useCallback, useState } from "react";
 import Gallery from "./Gallery";
 import Image from "./Image";
 import ActionButton from "@/components/common/ActionButton";
@@ -99,6 +99,8 @@ const GalleryModal: FC<Props> = ({
   const [selectedImage, setSelectedImage] = useState("");
   const [altText, setAltText] = useState("");
 
+  const handleClose = useCallback(() => onClose && onClose(), [onClose]);
+
   const handleOnImageChange: ChangeEventHandler<HTMLInputElement> = ({
     target,
   }) => {
@@ -106,15 +108,16 @@ const GalleryModal: FC<Props> = ({
     if (!files) return;
 
     const file = files[0];
-    if (!file.type.startsWith("image")) return onClose && onClose();
+    if (!file.type.startsWith("image")) return handleClose();
 
     onImageSelect(file);
   };
 
   const handleSelection = () => {
-    if (!selectedImage) return onClose && onClose();
+    if (!selectedImage) return handleClose();
 
     onSelect({ src: selectedImage, altText });
+    handleClose();
   };
 
   return (
