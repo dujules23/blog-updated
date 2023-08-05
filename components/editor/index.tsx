@@ -10,6 +10,7 @@ import TipTapImage from "@tiptap/extension-image";
 import EditLink from "./Link/EditLink";
 import GalleryModal, { ImageSelectionResult } from "./GalleryModal";
 import axios from "axios";
+import SeoForm from "./SeoForm";
 
 interface Props {}
 
@@ -112,6 +113,7 @@ const Editor: FC<Props> = (props): JSX.Element => {
         <div className="h-[1px] w-full bg-secondary-dark dark:bg-secondary-light my-3"></div>
         {editor ? <EditLink editor={editor} /> : null}
         <EditorContent editor={editor} />
+        <SeoForm />
       </div>
       <GalleryModal
         visible={showGallery}
