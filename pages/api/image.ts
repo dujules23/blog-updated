@@ -25,14 +25,14 @@ const uploadNewImage: NextApiHandler = (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const imageFile = files.image as formidable.File[];
-    const { secure_url, url } = await cloudinary.uploader.upload(
+    const { secure_url: url } = await cloudinary.uploader.upload(
       imageFile[0].filepath,
       {
         folder: "dev-blogs",
       }
     );
 
-    res.json({ image: secure_url });
+    res.json({ src: url });
   });
 };
 const readAllImages: NextApiHandler = async (req, res) => {

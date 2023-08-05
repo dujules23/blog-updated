@@ -16,13 +16,23 @@ interface Props {}
 const Editor: FC<Props> = (props): JSX.Element => {
   const [selectionRange, setSelectionRange] = useState<Range>();
   const [showGallery, setShowGallery] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState<{ src: string }[]>([]);
 
   const fetchImages = async () => {
     const { data } = await axios("/api/image");
-    console.log(data);
     setImages(data.images);
   };
+
+  const handleImageUpload = async (image: File) => {
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("image", image);
+    const { data } = await axios.post("/api/image", formData);
+    setUploading(false);
+    setImages([data, ...images]);
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -103,7 +113,8 @@ const Editor: FC<Props> = (props): JSX.Element => {
         onClose={() => setShowGallery(false)}
         onSelect={handleImageSelection}
         images={images}
-        onFileSelect={() => {}}
+        onFileSelect={handleImageUpload}
+        uploading={uploading}
       />
     </>
   );

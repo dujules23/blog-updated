@@ -12,6 +12,7 @@ export interface ImageSelectionResult {
 
 interface Props extends ModalProps {
   images: { src: string }[];
+  uploading?: boolean;
   onFileSelect(image: File): void;
   onSelect(result: ImageSelectionResult): void;
 }
@@ -19,6 +20,7 @@ interface Props extends ModalProps {
 const GalleryModal: FC<Props> = ({
   visible,
   images,
+  uploading,
   onClose,
   onFileSelect,
   onSelect,
@@ -56,6 +58,7 @@ const GalleryModal: FC<Props> = ({
           <div className="basis-[75%] max-h-[450px] overflow-y-auto custom-scroll-bar">
             <Gallery
               images={images}
+              uploading={uploading}
               onSelect={(src) => setSelectedImage(src)}
               selectedImage={selectedImage}
             />
