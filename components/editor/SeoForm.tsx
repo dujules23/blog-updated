@@ -14,11 +14,15 @@ const SeoForm: FC<Props> = (props): JSX.Element => {
       </h1>
       <Input name="slug" placeholder="slug-goes-here" label="Slug:" />
       <Input name="tags" placeholder="React, Next JS" label="Tags:" />
-
-      <textarea
-        className={classNames(commonInput, "text-lg h-20 resize-none")}
-        placeholder="Meta description"
-      ></textarea>
+      <div className="relative">
+        <textarea
+          className={classNames(commonInput, "text-lg h-20 resize-none")}
+          placeholder="Meta description"
+        ></textarea>
+        <p className="absolute bottom-3 right-3 text-primary-dark dark:text-primary text-sm">
+          0/150
+        </p>
+      </div>
     </div>
   );
 };

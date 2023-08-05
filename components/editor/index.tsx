@@ -112,7 +112,8 @@ const Editor: FC<Props> = (props): JSX.Element => {
         />
         <div className="h-[1px] w-full bg-secondary-dark dark:bg-secondary-light my-3"></div>
         {editor ? <EditLink editor={editor} /> : null}
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} className="min-h-[300px]" />
+        <div className="h-[1px] w-full bg-secondary-dark dark:bg-secondary-light my-3"></div>
         <SeoForm />
       </div>
       <GalleryModal
