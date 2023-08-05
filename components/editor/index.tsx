@@ -100,6 +100,11 @@ const Editor: FC<Props> = (props): JSX.Element => {
   return (
     <>
       <div className="p-3 dark:bg-primary-dark bg-primary transition">
+        <input
+          type="text"
+          className="py-2 outline-none bg-transparent w-full border-0 border-b-[1px] border-secondary-dark dark:border-secondary-light text-3xl font-semibold italic text-primary-dark dark:text-primary mb-3"
+          placeholder="Title"
+        />
         <ToolBar
           editor={editor}
           onOpenImageClick={() => setShowGallery(true)}
