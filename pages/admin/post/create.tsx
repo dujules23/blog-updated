@@ -6,7 +6,7 @@ interface Props {}
 const Create: NextPage<Props> = () => {
   return (
     <div className="max-w-4xl mx-auto">
-      <Editor />
+      <Editor onSubmit={(post) => console.log(post)} />
     </div>
   );
 };
