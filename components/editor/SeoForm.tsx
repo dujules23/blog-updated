@@ -1,12 +1,22 @@
-import { ChangeEventHandler, FC, useState } from "react";
+import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import classNames from "classnames";
+import slugify from "slugify";
 
-interface Props {}
+export interface SeoResult {
+  meta: string;
+  slug: string;
+  tags: string;
+}
+
+interface Props {
+  title?: string;
+  onChange(result: SeoResult): void;
+}
 
 const commonInput =
   "w-full bg-transparent outline-none border-2 border-secondary-dark focus:border-primary-dark focus:dark:border-primary rounded transition text-primary-dark dark:text-primary p-2 ";
 
-const SeoForm: FC<Props> = (props): JSX.Element => {
+const SeoForm: FC<Props> = ({ title = "", onChange }): JSX.Element => {
   const [values, setValues] = useState({ meta: "", slug: "", tags: "" });
 
   const handleChange: ChangeEventHandler<
@@ -15,11 +25,17 @@ const SeoForm: FC<Props> = (props): JSX.Element => {
     let { name, value } = target;
 
     if (name === "meta") value = value.substring(0, 150);
-
-    setValues({ ...values, [name]: value });
-
-    console.log(target.name);
+    const newValues = { ...values, [name]: value };
+    setValues(newValues);
+    onChange(newValues);
   };
+
+  useEffect(() => {
+    const slug = slugify(title.toLowerCase());
+    const newValues = { ...values, slug };
+    setValues(newValues);
+    onChange(newValues);
+  }, [title]);
 
   const { meta, slug, tags } = values;
   return (

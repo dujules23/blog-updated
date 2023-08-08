@@ -14,7 +14,7 @@ import SeoForm from "./SeoForm";
 
 interface Props {}
 
-const Editor: FC<Props> = (props): JSX.Element => {
+const Editor: FC<Props> = (): JSX.Element => {
   const [selectionRange, setSelectionRange] = useState<Range>();
   const [showGallery, setShowGallery] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -114,7 +114,7 @@ const Editor: FC<Props> = (props): JSX.Element => {
         {editor ? <EditLink editor={editor} /> : null}
         <EditorContent editor={editor} className="min-h-[300px]" />
         <div className="h-[1px] w-full bg-secondary-dark dark:bg-secondary-light my-3"></div>
-        <SeoForm />
+        <SeoForm onChange={(result) => console.log(result)} />
       </div>
       <GalleryModal
         visible={showGallery}
