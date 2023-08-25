@@ -31,7 +31,7 @@ const uploadNewImage: NextApiHandler = (req, res) => {
         folder: "dev-blogs",
       }
     );
-
+    console.log({ src: url });
     res.json({ src: url });
   });
 };

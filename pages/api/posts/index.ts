@@ -1,7 +1,12 @@
-import dbConnect from "@/lib/dbConnext";
+import dbConnect from "@/lib/dbConnect";
+import { readFile } from "@/lib/utils";
 import { postValidationSchema, validateSchema } from "@/lib/validator";
 import Joi from "joi";
 import { NextApiHandler } from "next";
+
+export const config = {
+  api: { bodyParser: false },
+};
 
 const handler: NextApiHandler = async (req, res) => {
   const { method } = req;
@@ -15,11 +20,16 @@ const handler: NextApiHandler = async (req, res) => {
   }
 };
 
-const createNewPost: NextApiHandler = (req, res) => {
-  const { body } = req;
+const createNewPost: NextApiHandler = async (req, res) => {
+  const { body, files } = await readFile(req);
 
-  const error = validateSchema(postValidationSchema, body);
-  if (error) return res.status(404).json({ error });
+  console.log(body);
+
+  let tags = [];
+  if (body.tags) tags = JSON.parse(body.tags as string);
+
+  const error = validateSchema(postValidationSchema, { ...body, tags });
+  if (error) return res.status(400).json({ error: error });
   res.json({ ok: true });
 };
 
