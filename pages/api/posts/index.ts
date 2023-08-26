@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import { readFile } from "@/lib/utils";
 import { postValidationSchema, validateSchema } from "@/lib/validator";
+import Post from "@/models/Post";
 import Joi from "joi";
 import { NextApiHandler } from "next";
 
@@ -30,7 +31,25 @@ const createNewPost: NextApiHandler = async (req, res) => {
 
   const error = validateSchema(postValidationSchema, { ...body, tags });
   if (error) return res.status(400).json({ error: error });
-  res.json({ ok: true });
+
+  const { title, content, slug, meta } = body;
+
+  await dbConnect();
+  const alreadyExists = await Post.findOne({ slug: body.slug });
+  if (alreadyExists)
+    return res.status(400).json({ error: "Slug needs to be unique!" });
+
+  const newPost = new Post({
+    title,
+    content,
+    slug,
+    meta,
+    tags,
+  });
+
+  await newPost.save();
+
+  res.json({ post: newPost });
 };
 
 export default handler;
