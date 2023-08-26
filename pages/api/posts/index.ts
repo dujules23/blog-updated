@@ -1,7 +1,9 @@
+import cloudinary from "@/lib/cloudinary";
 import dbConnect from "@/lib/dbConnect";
 import { readFile } from "@/lib/utils";
 import { postValidationSchema, validateSchema } from "@/lib/validator";
 import Post from "@/models/Post";
+import formidable from "formidable";
 import Joi from "joi";
 import { NextApiHandler } from "next";
 
@@ -54,6 +56,18 @@ const createNewPost: NextApiHandler = async (req, res) => {
     meta,
     tags,
   });
+
+  // uploading thumbnail if there is any
+  const thumbnail = files.thumbnail as formidable.File;
+  if (thumbnail) {
+    const { secure_url: url, public_id } = await cloudinary.uploader.upload(
+      thumbnail.filepath,
+      {
+        folder: "dev-blogs",
+      }
+    );
+    newPost.thumbnail = { url, public_id };
+  }
 
   await newPost.save();
 
