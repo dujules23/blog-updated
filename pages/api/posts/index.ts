@@ -9,6 +9,14 @@ export const config = {
   api: { bodyParser: false },
 };
 
+type bodyTypes = {
+  title: string;
+  content: string;
+  slug: string;
+  meta: string;
+  tags: string;
+};
+
 const handler: NextApiHandler = async (req, res) => {
   const { method } = req;
   switch (method) {
@@ -22,7 +30,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const createNewPost: NextApiHandler = async (req, res) => {
-  const { body, files } = await readFile(req);
+  const { body, files } = await readFile<bodyTypes>(req);
 
   console.log(body);
 
