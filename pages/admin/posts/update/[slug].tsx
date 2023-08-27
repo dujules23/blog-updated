@@ -2,6 +2,8 @@ import Editor, { FinalPost } from "@/components/editor";
 import AdminLayout from "@/components/layout/AdminLayout";
 import dbConnect from "@/lib/dbConnect";
 import Post from "@/models/Post";
+import { generateFormData } from "@/utils/helper";
+import axios from "axios";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -15,9 +17,23 @@ interface PostResponse extends FinalPost {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Update: NextPage<Props> = ({ post }) => {
+  const handleSubmit = async (post: FinalPost) => {
+    try {
+      // we have to generate FormData
+      const formData = generateFormData(post);
+      // submit our post
+
+      const { data } = await axios.patch("/api/posts", formData);
+
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
+
   return (
     <AdminLayout>
-      <Editor initialValue={post} onSubmit={() => {}} btnTitle="Update" />
+      <Editor initialValue={post} onSubmit={handleSubmit} btnTitle="Update" />
     </AdminLayout>
   );
 };
@@ -29,27 +45,31 @@ interface ServerSideResponse {
 export const getServerSideProps: GetServerSideProps<
   ServerSideResponse
 > = async (context) => {
-  const slug = context.query.slug as string;
+  try {
+    const slug = context.query.slug as string;
 
-  await dbConnect();
-  const post = await Post.findOne({ slug });
-  if (!post) return { notFound: true };
+    await dbConnect();
+    const post = await Post.findOne({ slug });
+    if (!post) return { notFound: true };
 
-  const { _id, meta, title, content, thumbnail, tags } = post;
+    const { _id, meta, title, content, thumbnail, tags } = post;
 
-  return {
-    props: {
-      post: {
-        id: _id.toString(),
-        title,
-        content,
-        tags: tags.join(", "),
-        thumbnail: thumbnail?.url || "",
-        slug,
-        meta,
+    return {
+      props: {
+        post: {
+          id: _id.toString(),
+          title,
+          content,
+          tags: tags.join(", "),
+          thumbnail: thumbnail?.url || "",
+          slug,
+          meta,
+        },
       },
-    },
-  };
+    };
+  } catch (error) {
+    return { notFound: true };
+  }
 };
 
 export default Update;
