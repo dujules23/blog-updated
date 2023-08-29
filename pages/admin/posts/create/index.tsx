@@ -11,8 +11,8 @@ const Create: NextPage<Props> = () => {
     try {
       // we have to generate FormData
       const formData = generateFormData(post);
-      // submit our post
 
+      // submit our post
       const { data } = await axios.post("/api/posts", formData);
 
       console.log(data);

@@ -12,4 +12,6 @@ export const generateFormData = (post: FinalPost) => {
       formData.append(key, value);
     }
   }
+
+  return formData;
 };
