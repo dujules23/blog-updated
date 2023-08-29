@@ -21,9 +21,8 @@ const Update: NextPage<Props> = ({ post }) => {
     try {
       // we have to generate FormData
       const formData = generateFormData(post);
-      // submit our post
-
-      const { data } = await axios.patch("/api/posts", formData);
+      // edit our updated post via endpoint plus the post Id
+      const { data } = await axios.patch("/api/posts/" + post.id, formData);
 
       console.log(data);
     } catch (error: any) {
@@ -41,7 +40,7 @@ const Update: NextPage<Props> = ({ post }) => {
 interface ServerSideResponse {
   post: PostResponse;
 }
-
+// get server side props function,
 export const getServerSideProps: GetServerSideProps<
   ServerSideResponse
 > = async (context) => {
