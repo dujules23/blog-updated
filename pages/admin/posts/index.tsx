@@ -13,7 +13,7 @@ const posts = [
     tags: ["post"],
     thumbnail:
       "https://media.eventhubs.com/images/2023/08/05_first-look-aki-bnrt.webp",
-    createdAt: "Today",
+    createdAt: new Date().toString(),
   },
   {
     title: "Street fighter 6 Tips (Part 2)",
@@ -22,7 +22,7 @@ const posts = [
     tags: ["post"],
     thumbnail:
       "https://www.gameshub.com/wp-content/uploads/sites/5/2023/07/street-fighter-6-world-tour-rashid-gameshub-08.jpg?w=1024",
-    createdAt: "Today",
+    createdAt: new Date().toString(),
   },
   {
     title: "Street fighter 6 Tips (Part 3)",
@@ -30,7 +30,7 @@ const posts = [
     meta: "Part 2 in the SF6 tips series",
     tags: ["post"],
     thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: "Today",
+    createdAt: new Date().toString(),
   },
   {
     title: "Street fighter 6 Tips (Part 3)",
@@ -38,7 +38,7 @@ const posts = [
     meta: "Part 2 in the SF6 tips series",
     tags: ["post"],
     thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: "Today",
+    createdAt: new Date().toString(),
   },
   {
     title: "Street fighter 6 Tips (Part 3)",
@@ -46,7 +46,7 @@ const posts = [
     meta: "Part 2 in the SF6 tips series",
     tags: ["post"],
     thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: "Today",
+    createdAt: new Date().toString(),
   },
   {
     title: "Street fighter 6 Tips (Part 3)",
@@ -54,7 +54,7 @@ const posts = [
     meta: "Part 2 in the SF6 tips series",
     tags: ["post"],
     thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: "Today",
+    createdAt: new Date().toString(),
   },
 ];
 
