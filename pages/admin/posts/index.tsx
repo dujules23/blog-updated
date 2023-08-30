@@ -2,6 +2,7 @@ import AdminNav from "@/components/common/AdminNav";
 import PostCard from "@/components/common/PostCard";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { NextPage } from "next";
+import Link from "next/link";
 import { useState } from "react";
 
 interface Props {}
@@ -64,8 +65,8 @@ const Posts: NextPage<Props> = () => {
     <AdminLayout>
       <div className="max-w-4xl mx-auto p-3">
         <div className="grid grid-cols-3 gap-4">
-          {postsToRender.map((post, index) => (
-            <PostCard post={post} key={index} />
+          {postsToRender.map((post) => (
+            <PostCard post={post} key={post.slug} />
           ))}
         </div>
       </div>

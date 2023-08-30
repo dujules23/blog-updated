@@ -2,6 +2,7 @@ import { PostDetail } from "@/utils/types";
 import Image from "next/image";
 import dateformat from "dateformat";
 import { FC } from "react";
+import Link from "next/link";
 
 interface Props {
   post: PostDetail;
@@ -29,23 +30,30 @@ const PostCard: FC<Props> = ({ post }): JSX.Element => {
 
       {/* Post Info */}
       <div className="p-2 flex-1 flex flex-col">
-        <div className="flex items-center justify-between text-sm text-primary-dark dark:text-primary">
-          <div className="flex items-center space-x-1">
-            {tags.map((t, index) => (
-              <span key={t + index}>#{t}</span>
-            ))}
+        <Link href={"/" + slug}>
+          <div className="flex items-center justify-between text-sm text-primary-dark dark:text-primary">
+            <div className="flex items-center space-x-1">
+              {tags.map((t, index) => (
+                <span key={t + index}>#{t}</span>
+              ))}
+            </div>
+            <span>{dateformat(createdAt, "d-mmm-yy")}</span>
           </div>
-          <span>{dateformat(createdAt, "d-mmm-yy")}</span>
-        </div>
+
+          <h1 className="font-semibold text-primary-dark dark:text-primary">
+            {trimText(title, 50)}
+          </h1>
+          <p className="text-secondary-dark">{trimText(meta, 70)}</p>
+        </Link>
 
         {/* Title */}
-        <h1 className="font-semibold text-primary-dark dark:text-primary">
-          {trimText(title, 50)}
-        </h1>
-        <p className="text-secondary-dark">{trimText(meta, 70)}</p>
 
         <div className="flex justify-end items-center h-8 mt-auto space-x-4 text-primary-dark dark:text-primary">
-          <button className="hover:underline">Edit</button>
+          {/* <button className="hover:underline">Edit</button> */}
+          <div className="hover:underline">
+            <Link href={"/admin/posts/update/" + slug}>Edit</Link>
+          </div>
+
           <button className="hover:underline">Delete</button>
         </div>
       </div>
