@@ -1,65 +1,22 @@
 import AdminNav from "@/components/common/AdminNav";
 import PostCard from "@/components/common/PostCard";
 import AdminLayout from "@/components/layout/AdminLayout";
-import { NextPage } from "next";
+import { formatPosts, readPostsFromDb } from "@/lib/utils";
+import { PostDetail } from "@/utils/types";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import Link from "next/link";
 import { useState } from "react";
 
-interface Props {}
-const posts = [
-  {
-    title: "Street fighter 6 Tips (Part 1)",
-    slug: "street-fighter-6-tips-part-1",
-    meta: "These are some basic approaches to start playing Street Fighter 6",
-    tags: ["post"],
-    thumbnail:
-      "https://media.eventhubs.com/images/2023/08/05_first-look-aki-bnrt.webp",
-    createdAt: new Date().toString(),
-  },
-  {
-    title: "Street fighter 6 Tips (Part 2)",
-    slug: "street-fighter-6-tips-part-2",
-    meta: "Part 2 in the SF6 tips series",
-    tags: ["post"],
-    thumbnail:
-      "https://www.gameshub.com/wp-content/uploads/sites/5/2023/07/street-fighter-6-world-tour-rashid-gameshub-08.jpg?w=1024",
-    createdAt: new Date().toString(),
-  },
-  {
-    title: "Street fighter 6 Tips (Part 3)",
-    slug: "street-fighter-6-tips-part-3",
-    meta: "Part 2 in the SF6 tips series",
-    tags: ["post"],
-    thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: new Date().toString(),
-  },
-  {
-    title: "Street fighter 6 Tips (Part 3)",
-    slug: "street-fighter-6-tips-part-3",
-    meta: "Part 2 in the SF6 tips series",
-    tags: ["post"],
-    thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: new Date().toString(),
-  },
-  {
-    title: "Street fighter 6 Tips (Part 3)",
-    slug: "street-fighter-6-tips-part-3",
-    meta: "Part 2 in the SF6 tips series",
-    tags: ["post"],
-    thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: new Date().toString(),
-  },
-  {
-    title: "Street fighter 6 Tips (Part 3)",
-    slug: "street-fighter-6-tips-part-3",
-    meta: "Part 2 in the SF6 tips series",
-    tags: ["post"],
-    thumbnail: "https://i.ytimg.com/vi/XvbudLcwgWs/maxresdefault.jpg",
-    createdAt: new Date().toString(),
-  },
-];
+type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-const Posts: NextPage<Props> = () => {
+let pageNo = 0;
+const limit = 9;
+
+const Posts: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
   return (
     <AdminLayout>
@@ -72,6 +29,29 @@ const Posts: NextPage<Props> = () => {
       </div>
     </AdminLayout>
   );
+};
+
+interface ServerSideResponse {
+  posts: PostDetail[];
+}
+
+export const getServerSideProps: GetServerSideProps<
+  ServerSideResponse
+> = async () => {
+  try {
+    // read posts
+    const posts = await readPostsFromDb(limit, pageNo);
+
+    // format posts
+    const formattedPosts = formatPosts(posts);
+    return {
+      props: {
+        posts: formattedPosts,
+      },
+    };
+  } catch (error) {
+    return { notFound: true };
+  }
 };
 
 export default Posts;
