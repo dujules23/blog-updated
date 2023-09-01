@@ -1,4 +1,5 @@
 import AdminNav from "@/components/common/AdminNav";
+import InfiniteScrollPosts from "@/components/common/InfiniteScrollPosts";
 import PostCard from "@/components/common/PostCard";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { formatPosts, readPostsFromDb } from "@/lib/utils";
@@ -20,13 +21,7 @@ const Posts: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
   return (
     <AdminLayout>
-      <div className="max-w-4xl mx-auto p-3">
-        <div className="grid grid-cols-3 gap-4">
-          {postsToRender.map((post) => (
-            <PostCard post={post} key={post.slug} />
-          ))}
-        </div>
-      </div>
+      <InfiniteScrollPosts />
     </AdminLayout>
   );
 };

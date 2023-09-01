@@ -8,6 +8,7 @@ import { spawn } from "child_process";
 interface Props {
   post: PostDetail;
   busy?: boolean;
+  controls?: boolean;
   onDeleteClick?(): void;
 }
 // function that trims text
@@ -16,7 +17,12 @@ const trimText = (text: string, trimBy: number) => {
   return text.substring(0, trimBy).trim() + "...";
 };
 
-const PostCard: FC<Props> = ({ post, busy, onDeleteClick }): JSX.Element => {
+const PostCard: FC<Props> = ({
+  controls = false,
+  post,
+  busy,
+  onDeleteClick,
+}): JSX.Element => {
   const { title, slug, meta, tags, thumbnail, createdAt } = post;
   return (
     <div className="rounded shadow-sm shadow-secondary-dark overflow-hidden bg-primary dark:bg-primary-dark transition flex flex-col h-full">
@@ -51,21 +57,23 @@ const PostCard: FC<Props> = ({ post, busy, onDeleteClick }): JSX.Element => {
 
         {/* Title */}
 
-        <div className="flex justify-end items-center h-8 mt-auto space-x-4 text-primary-dark dark:text-primary">
-          {busy ? (
-            <span className="animate-pulse">Removing</span>
-          ) : (
-            <>
-              <div className="hover:underline">
-                <Link href={"/admin/posts/update/" + slug}>Edit</Link>
-              </div>
+        {controls && (
+          <div className="flex justify-end items-center h-8 mt-auto space-x-4 text-primary-dark dark:text-primary">
+            {busy ? (
+              <span className="animate-pulse">Removing</span>
+            ) : (
+              <>
+                <div className="hover:underline">
+                  <Link href={"/admin/posts/update/" + slug}>Edit</Link>
+                </div>
 
-              <button onClick={onDeleteClick} className="hover:underline">
-                Delete
-              </button>
-            </>
-          )}
-        </div>
+                <button onClick={onDeleteClick} className="hover:underline">
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
