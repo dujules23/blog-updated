@@ -47,7 +47,7 @@ const Home: NextPage<Props> = ({ posts }) => {
 
   return (
     <DefaultLayout>
-      <div className="pb-20"></div>
+      {/* <div className="pb-20"></div> */}
       <InfiniteScrollPosts
         hasMore={hasMorePosts}
         next={fetchMorePosts}
