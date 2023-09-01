@@ -4,6 +4,7 @@ import PostCard from "@/components/common/PostCard";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { formatPosts, readPostsFromDb } from "@/lib/utils";
 import { PostDetail } from "@/utils/types";
+import axios from "axios";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -19,9 +20,39 @@ const limit = 9;
 
 const Posts: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+
+  const fetchMorePosts = async () => {
+    try {
+      // increases page number
+      pageNo++;
+      // api call using page number and limit to get next page of data
+      const { data } = await axios(
+        `/api/posts?limit=${limit}&pageNo=${pageNo}`
+      );
+      // checks to see if the length of posts are less than 9 (limit), we ran out of posts in the database
+      if (data.posts.length < limit) {
+        // sets posts, as we scroll down we add the posts that were brought in through the endpoint
+        setPostsToRender([...postsToRender, ...data.posts]);
+        setHasMorePosts(false);
+      } else {
+        setPostsToRender([...postsToRender, ...data.posts]);
+      }
+    } catch (error) {
+      setHasMorePosts(false);
+      console.log(error);
+    }
+  };
+
   return (
     <AdminLayout>
-      <InfiniteScrollPosts />
+      <InfiniteScrollPosts
+        hasMore={hasMorePosts}
+        next={fetchMorePosts}
+        dataLength={postsToRender.length}
+        posts={postsToRender}
+        showControls
+      />
     </AdminLayout>
   );
 };
