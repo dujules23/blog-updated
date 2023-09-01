@@ -2,6 +2,7 @@ import cloudinary from "@/lib/cloudinary";
 import { readFile } from "@/lib/utils";
 import { postValidationSchema, validateSchema } from "@/lib/validator";
 import Post from "@/models/Post";
+import { IncomingPost } from "@/utils/types";
 import formidable from "formidable";
 import { NextApiHandler } from "next";
 import { textChangeRangeNewSpan } from "typescript";
@@ -9,14 +10,7 @@ import { textChangeRangeNewSpan } from "typescript";
 export const config = {
   api: { bodyParser: false },
 };
-// types for body, maybe export these to be shared?
-interface bodyTypes {
-  title: string;
-  content: string;
-  slug: string;
-  meta: string;
-  tags: string;
-}
+
 // notice Patch and not Put here, we just to edit specific parts of our post
 const handler: NextApiHandler = (req, res) => {
   const { method } = req;
@@ -33,7 +27,7 @@ const updatePost: NextApiHandler = async (req, res) => {
   const post = await Post.findById(postId);
   if (!post) return res.status(404).json({ error: "Post not found!" });
 
-  const { files, body } = await readFile<bodyTypes>(req);
+  const { files, body } = await readFile<IncomingPost>(req);
 
   let tags = [];
   // tags will be in string form so converting to array

@@ -6,3 +6,11 @@ export interface PostDetail {
   thumbnail?: string;
   createdAt: string;
 }
+
+export interface IncomingPost {
+  title: string;
+  content: string;
+  slug: string;
+  meta: string;
+  tags: string;
+}

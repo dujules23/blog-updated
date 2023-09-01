@@ -33,6 +33,8 @@ export const readFile = async <T extends object>(
 };
 
 export const readPostsFromDb = async (limit: number, pageNo: number) => {
+  if (!limit || limit > 10)
+    throw Error("Please use limit under 10 and a valid page number");
   const skip = limit * pageNo;
   await dbConnect();
   // finds posts, sorts by createdAt descending, skip increases as we increase page number, Limit to only fetch limited posts.
