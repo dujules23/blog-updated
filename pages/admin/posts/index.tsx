@@ -1,4 +1,4 @@
-import AdminNav from "@/components/common/AdminNav";
+import AdminNav from "@/components/common/nav/AdminNav";
 import InfiniteScrollPosts from "@/components/common/InfiniteScrollPosts";
 import PostCard from "@/components/common/PostCard";
 import AdminLayout from "@/components/layout/AdminLayout";
