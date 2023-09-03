@@ -3,6 +3,7 @@ import Logo from "../Logo";
 import { HiLightBulb } from "react-icons/hi";
 import { APP_NAME } from "../AppHead";
 import Link from "next/link";
+import { GitHubAuthButton } from "@/components/button";
 
 interface Props {}
 
@@ -21,6 +22,8 @@ const UserNav: FC<Props> = (props): JSX.Element => {
         <button className="dark:text-secondary-dark text-secondary-light">
           <HiLightBulb size={34} />
         </button>
+
+        <GitHubAuthButton lightOnly />
       </div>
     </div>
   );
