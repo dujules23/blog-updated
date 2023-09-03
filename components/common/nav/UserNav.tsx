@@ -4,6 +4,7 @@ import { HiLightBulb } from "react-icons/hi";
 import { APP_NAME } from "../AppHead";
 import Link from "next/link";
 import { GitHubAuthButton } from "@/components/button";
+import ProfileHead from "../ProfileHead";
 
 interface Props {}
 
@@ -23,7 +24,8 @@ const UserNav: FC<Props> = (props): JSX.Element => {
           <HiLightBulb size={34} />
         </button>
 
-        <GitHubAuthButton lightOnly />
+        {/* <GitHubAuthButton lightOnly /> */}
+        <ProfileHead nameInitial="D" lightOnly />
       </div>
     </div>
   );
