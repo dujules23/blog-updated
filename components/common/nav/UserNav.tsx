@@ -5,10 +5,16 @@ import { APP_NAME } from "../AppHead";
 import Link from "next/link";
 import { GitHubAuthButton } from "@/components/button";
 import ProfileHead from "../ProfileHead";
+import DropdownOptions, { dropDownOptions } from "../DropdownOptions";
 
 interface Props {}
 
 const UserNav: FC<Props> = (props): JSX.Element => {
+  const dropDownOptions: dropDownOptions = [
+    { label: "Dashboard", onClick() {} },
+    { label: "Logout", onClick() {} },
+  ];
+
   return (
     <div className="flex items-center justify-between bg-primary-dark p-3">
       {/* Logo and Title */}
@@ -25,7 +31,11 @@ const UserNav: FC<Props> = (props): JSX.Element => {
         </button>
 
         {/* <GitHubAuthButton lightOnly /> */}
-        <ProfileHead nameInitial="D" lightOnly />
+
+        <DropdownOptions
+          options={dropDownOptions}
+          head={<ProfileHead nameInitial="D" lightOnly />}
+        />
       </div>
     </div>
   );
