@@ -14,7 +14,7 @@ const UserNav: FC<Props> = (props): JSX.Element => {
   const { data, status } = useSession();
 
   const isAuth = status === "authenticated";
-
+  // function for handling login with Github
   const handleLoginWithGitHub = async () => {
     const res = await signIn("github");
     console.log(res);
