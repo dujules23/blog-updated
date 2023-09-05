@@ -6,10 +6,14 @@ import Link from "next/link";
 import { GitHubAuthButton } from "@/components/button";
 import ProfileHead from "../ProfileHead";
 import DropdownOptions, { dropDownOptions } from "../DropdownOptions";
+import { useSession } from "next-auth/react";
 
 interface Props {}
 
 const UserNav: FC<Props> = (props): JSX.Element => {
+  const session = useSession();
+  console.log(session);
+
   const dropDownOptions: dropDownOptions = [
     { label: "Dashboard", onClick() {} },
     { label: "Logout", onClick() {} },
