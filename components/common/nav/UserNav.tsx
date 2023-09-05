@@ -6,17 +6,28 @@ import Link from "next/link";
 import { GitHubAuthButton } from "@/components/button";
 import ProfileHead from "../ProfileHead";
 import DropdownOptions, { dropDownOptions } from "../DropdownOptions";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface Props {}
 
 const UserNav: FC<Props> = (props): JSX.Element => {
-  const session = useSession();
-  console.log(session);
+  const { data, status } = useSession();
+
+  const isAuth = status === "authenticated";
+
+  const handleLoginWithGitHub = async () => {
+    const res = await signIn("github");
+    console.log(res);
+  };
 
   const dropDownOptions: dropDownOptions = [
     { label: "Dashboard", onClick() {} },
-    { label: "Logout", onClick() {} },
+    {
+      label: "Logout",
+      async onClick() {
+        await signOut();
+      },
+    },
   ];
 
   return (
@@ -34,12 +45,14 @@ const UserNav: FC<Props> = (props): JSX.Element => {
           <HiLightBulb size={34} />
         </button>
 
-        {/* <GitHubAuthButton lightOnly /> */}
-
-        <DropdownOptions
-          options={dropDownOptions}
-          head={<ProfileHead nameInitial="D" lightOnly />}
-        />
+        {isAuth ? (
+          <DropdownOptions
+            options={dropDownOptions}
+            head={<ProfileHead nameInitial="D" lightOnly />}
+          />
+        ) : (
+          <GitHubAuthButton onClick={handleLoginWithGitHub} lightOnly />
+        )}
       </div>
     </div>
   );
