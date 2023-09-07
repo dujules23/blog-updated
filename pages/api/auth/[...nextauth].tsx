@@ -38,11 +38,20 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, user }) {
       if (user) token.role = (user as any).role;
-      console.log(user);
       return token;
     },
-    session({ session }) {
-      console.log(session);
+    async session({ session }) {
+      await dbConnect();
+      const user = await User.findOne({ email: session.user?.email });
+      if (user)
+        session.user = {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
+          role: user.role,
+        } as any;
+
       return session;
     },
   },
