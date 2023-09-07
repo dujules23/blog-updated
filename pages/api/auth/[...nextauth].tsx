@@ -12,22 +12,35 @@ const authOptions: NextAuthOptions = {
         // find out the user
         await dbConnect();
         const oldUser = await User.findOne({ email: profile.email });
+        const userProfile = {
+          email: profile.email,
+          name: profile.name || profile.login,
+          avatar: profile.avatar_url,
+          role: "user",
+        };
         // store new user inside db
         if (!oldUser) {
           const newUser = new User({
-            email: profile.email,
-            name: profile.name || profile.login,
+            ...userProfile,
             provider: "github",
-            avatar: profile.avatar_url,
           });
 
           await newUser.save();
+        } else {
+          userProfile.role = oldUser.role;
         }
 
-        return profile;
+        return { id: profile.id };
       },
     }),
   ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) token.role = (user as any).role;
+      console.log(user);
+      return token;
+    },
+  },
 };
 
 export default NextAuth(authOptions);
