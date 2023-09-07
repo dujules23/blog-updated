@@ -8,15 +8,35 @@ import {
   NextPage,
 } from "next";
 import { Trykker } from "next/font/google";
+import parse from "html-react-parser";
+import Image from "next/image";
+import dateFormat from "dateformat";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const SinglePost: NextPage<Props> = ({ post }) => {
+  const { title, content, tags, meta, slug, thumbnail, createdAt } = post;
   return (
-    <DefaultLayout>
-      {post.slug}
-      {post.title}
-      {post.content}
+    <DefaultLayout title={title} desc={meta}>
+      <div className="pb-20">
+        {thumbnail ? (
+          <div className="relative aspect-video">
+            <Image src={thumbnail} alt={title} layout="fill" />
+          </div>
+        ) : null}
+
+        <div className="flex items-center justify-between py-2">
+          {tags.map((t, index) => (
+            <span key={t + index}>#{tags}</span>
+          ))}
+          <span>{dateFormat(createdAt, "d-mmm-yyyy")}</span>
+        </div>
+
+        <div className="prose prose-lg max-w-full mx-auto">
+          <h1>{title}</h1>
+          {parse(content)}
+        </div>
+      </div>
     </DefaultLayout>
   );
 };
