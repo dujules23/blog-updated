@@ -10,6 +10,7 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       async profile(profile) {
         // find out the user
+        console.log(profile);
         await dbConnect();
         const oldUser = await User.findOne({ email: profile.email });
         const userProfile = {
@@ -30,7 +31,7 @@ const authOptions: NextAuthOptions = {
           userProfile.role = oldUser.role;
         }
 
-        return { id: profile.id };
+        return { id: profile.id, ...userProfile };
       },
     }),
   ],
@@ -39,6 +40,10 @@ const authOptions: NextAuthOptions = {
       if (user) token.role = (user as any).role;
       console.log(user);
       return token;
+    },
+    session({ session }) {
+      console.log(session);
+      return session;
     },
   },
   pages: {
