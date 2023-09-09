@@ -9,6 +9,7 @@ import DropdownOptions, { dropDownOptions } from "../DropdownOptions";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { UserProfile } from "@/utils/types";
+import useDarkMode from "@/hooks/useDarkMode";
 
 interface Props {}
 
@@ -27,6 +28,8 @@ const UserNav: FC<Props> = (props): JSX.Element => {
   const isAuth = status === "authenticated";
   const profile = data?.user as UserProfile | undefined;
   const isAdmin = profile && profile.role === "admin";
+
+  const { toggleTheme } = useDarkMode();
 
   // function for handling login with Github
   const handleLoginWithGitHub = async () => {
@@ -56,7 +59,10 @@ const UserNav: FC<Props> = (props): JSX.Element => {
       </Link>
       {/* Dark Mode Button */}
       <div className="flex items-center space-x-5">
-        <button className="dark:text-secondary-dark text-secondary-light">
+        <button
+          onClick={toggleTheme}
+          className="dark:text-secondary-dark text-secondary-light"
+        >
           <HiLightBulb size={34} />
         </button>
 

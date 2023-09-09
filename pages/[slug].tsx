@@ -25,14 +25,14 @@ const SinglePost: NextPage<Props> = ({ post }) => {
           </div>
         ) : null}
 
-        <div className="flex items-center justify-between py-2">
+        <div className="flex items-center justify-between py-2 dark:invert">
           {tags.map((t, index) => (
             <span key={t + index}>#{tags}</span>
           ))}
           <span>{dateFormat(createdAt, "d-mmm-yyyy")}</span>
         </div>
 
-        <div className="prose prose-lg max-w-full mx-auto">
+        <div className="prose prose-lg dark:prose-invert max-w-full mx-auto">
           <h1>{title}</h1>
           {parse(content)}
         </div>
