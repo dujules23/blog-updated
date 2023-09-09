@@ -21,7 +21,6 @@ const navItems = [
   { href: "/admin/posts", icon: AiOutlineContainer, label: "Posts" },
   { href: "/admin/users", icon: AiOutlineTeam, label: "Users" },
   { href: "/admin/comments", icon: AiOutlineMail, label: "Comments" },
-  { href: "/admin/contact", icon: AiOutlineContacts, label: "Contact" },
 ];
 
 const AdminLayout: FC<Props> = ({ children, title }): JSX.Element => {

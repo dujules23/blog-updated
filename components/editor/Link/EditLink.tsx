@@ -51,6 +51,7 @@ const EditLink: FC<Props> = ({ editor }): JSX.Element => {
         onHide: () => {
           setShowEditForm(false);
         },
+        appendTo: "parent",
       }}
     >
       <LinkForm
