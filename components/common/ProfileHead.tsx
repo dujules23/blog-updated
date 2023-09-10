@@ -20,7 +20,7 @@ const ProfileHead: FC<Props> = ({
   // getStyle function that renders conditional styles, maybe turned into a component
   const getStyle = useCallback(() => {
     if (lightOnly) return "text-primary-dark bg-primary";
-    return "bg-primary-dark dark:bg-primary dark:text-primary dark text primary";
+    return "bg-primary-dark dark:bg-primary dark:text-primary-dark text-primary";
   }, [lightOnly]);
 
   return (
