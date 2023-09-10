@@ -10,7 +10,7 @@ interface Props {
   /* Common Class variable */
 }
 const commonClass =
-  "border border-dashed border-secondary-dark flex items-center justify-center rounded cursor-pointer aspect-video";
+  "border border-dashed border-secondary-dark flex items-center justify-center rounded cursor-pointer aspect-video text-secondary-dark dark:text-secondary-light";
 
 const ThumbnailSelector: FC<Props> = ({
   initialValue,

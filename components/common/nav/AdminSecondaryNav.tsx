@@ -4,6 +4,7 @@ import ProfileHead from "../ProfileHead";
 import { useRouter } from "next/router";
 import useDarkMode from "@/hooks/useDarkMode";
 import { signOut } from "next-auth/react";
+import SearchBar from "../SearchBar";
 
 interface Props {}
 
@@ -31,7 +32,7 @@ const AdminSecondaryNav: NextPage<Props> = () => {
   return (
     <div className="flex items-center justify-between">
       {/* search bar */}
-      <input type="text" />
+      <SearchBar />
       {/* options/ profile head */}
       <DropdownOptions
         head={<ProfileHead nameInitial="D" />}

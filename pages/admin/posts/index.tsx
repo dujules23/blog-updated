@@ -12,6 +12,7 @@ import {
 } from "next";
 import Link from "next/link";
 import { useState } from "react";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -45,15 +46,23 @@ const Posts: NextPage<Props> = ({ posts }) => {
   };
 
   return (
-    <AdminLayout>
-      <InfiniteScrollPosts
-        hasMore={hasMorePosts}
-        next={fetchMorePosts}
-        dataLength={postsToRender.length}
-        posts={postsToRender}
-        showControls
+    <>
+      <AdminLayout>
+        <InfiniteScrollPosts
+          hasMore={hasMorePosts}
+          next={fetchMorePosts}
+          dataLength={postsToRender.length}
+          posts={postsToRender}
+          showControls
+        />
+      </AdminLayout>
+      <ConfirmModal
+        visible
+        title="Are you sure?"
+        subTitle="This action will remove this post permanently!"
+        // busy
       />
-    </AdminLayout>
+    </>
   );
 };
 
