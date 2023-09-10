@@ -31,7 +31,22 @@ const useDarkMode = () => {
     if (oldTheme) {
       return updateTheme(oldTheme);
     }
+
+    // checks to see if dark mode is on the device
+    const runningOnDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    // if it is on the device, sets blog to dark mode, if not sets to defaultTheme
+    if (runningOnDarkMode) {
+      updateTheme(darkTheme);
+      storeThemeToLs(darkTheme);
+    } else {
+      updateTheme(defaultTheme);
+      storeThemeToLs(defaultTheme);
+    }
   }, []);
+
   return { toggleTheme };
 };
 
