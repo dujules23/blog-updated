@@ -40,10 +40,16 @@ const ConfirmModal: FC<Props> = ({
         )}
         {!busy && (
           <div className="flex items-center space-x-2 pt-2">
-            <button className={classNames(commonBtnClasses, "bg-red-500")}>
+            <button
+              onClick={onConfirm}
+              className={classNames(commonBtnClasses, "bg-red-500")}
+            >
               Confirm
             </button>
-            <button className={classNames(commonBtnClasses, "bg-blue-500")}>
+            <button
+              onClick={onCancel}
+              className={classNames(commonBtnClasses, "bg-blue-500")}
+            >
               Cancel
             </button>
           </div>

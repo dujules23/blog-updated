@@ -10,10 +10,12 @@ import {
 } from "next";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import { formatPosts, readPostsFromDb } from "@/lib/utils";
-import { PostDetail } from "@/utils/types";
+import { PostDetail, UserProfile } from "@/utils/types";
 import InfiniteScrollPosts from "@/components/common/InfiniteScrollPosts";
 import { useState } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { filterPosts } from "@/utils/helper";
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -21,7 +23,11 @@ const Home: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
   const [hasMorePosts, setHasMorePosts] = useState(true);
 
-  const isAdmin = false;
+  const { data } = useSession();
+  const profile = data?.user as UserProfile;
+
+  const isAdmin = profile && profile.role === "admin";
+
   // pagination function
   const fetchMorePosts = async () => {
     try {
@@ -54,6 +60,9 @@ const Home: NextPage<Props> = ({ posts }) => {
         dataLength={postsToRender.length}
         posts={postsToRender}
         showControls={isAdmin}
+        onPostRemoved={(post) =>
+          setPostsToRender(filterPosts(postsToRender, post))
+        }
       />
     </DefaultLayout>
   );

@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import ConfirmModal from "@/components/common/ConfirmModal";
+import { filterPosts } from "@/utils/helper";
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -54,14 +55,11 @@ const Posts: NextPage<Props> = ({ posts }) => {
           dataLength={postsToRender.length}
           posts={postsToRender}
           showControls
+          onPostRemoved={(post) =>
+            setPostsToRender(filterPosts(postsToRender, post))
+          }
         />
       </AdminLayout>
-      <ConfirmModal
-        // visible
-        title="Are you sure?"
-        subTitle="This action will remove this post permanently!"
-        // busy
-      />
     </>
   );
 };
