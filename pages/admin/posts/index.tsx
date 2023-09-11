@@ -57,7 +57,7 @@ const Posts: NextPage<Props> = ({ posts }) => {
         />
       </AdminLayout>
       <ConfirmModal
-        visible
+        // visible
         title="Are you sure?"
         subTitle="This action will remove this post permanently!"
         // busy
