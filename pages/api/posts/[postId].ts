@@ -1,5 +1,5 @@
 import cloudinary from "@/lib/cloudinary";
-import { readFile } from "@/lib/utils";
+import { isAdmin, readFile } from "@/lib/utils";
 import { postValidationSchema, validateSchema } from "@/lib/validator";
 import Post from "@/models/Post";
 import { IncomingPost } from "@/utils/types";
@@ -26,6 +26,9 @@ const handler: NextApiHandler = (req, res) => {
 
 const removePost: NextApiHandler = async (req, res) => {
   try {
+    const admin = await isAdmin(req, res);
+    if (!admin) return res.status(401).json({ error: "Unauthorized Request!" });
+
     const postId = req.query.postId as string;
     const post = await Post.findByIdAndDelete(postId);
     if (!post) return res.status(404).json({ error: "Post not found!" });
@@ -43,6 +46,10 @@ const removePost: NextApiHandler = async (req, res) => {
 
 // update post function
 const updatePost: NextApiHandler = async (req, res) => {
+  // checks to see if admin session
+  const admin = await isAdmin(req, res);
+  if (!admin) return res.status(401).json({ error: "Unauthorized Request!" });
+
   const postId = req.query.postId as string;
   const post = await Post.findById(postId);
   if (!post) return res.status(404).json({ error: "Post not found!" });
