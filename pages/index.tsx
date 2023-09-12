@@ -21,7 +21,7 @@ type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Home: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
-  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(posts.length >= limit);
 
   const { data } = useSession();
   const profile = data?.user as UserProfile;
@@ -35,7 +35,7 @@ const Home: NextPage<Props> = ({ posts }) => {
       pageNo++;
       // api call using page number and limit to get next page of data
       const { data } = await axios(
-        `/api/posts?limit=${limit}&pageNo=${pageNo}`
+        `/api/posts?limit=${limit}&skip=${postsToRender.length}`
       );
       // checks to see if the length of posts are less than 9 (limit), we ran out of posts in the database
       if (data.posts.length < limit) {

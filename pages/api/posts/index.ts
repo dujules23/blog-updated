@@ -7,6 +7,7 @@ import { IncomingPost } from "@/utils/types";
 import formidable from "formidable";
 import Joi from "joi";
 import { NextApiHandler } from "next";
+import { parseJsonText } from "typescript";
 
 export const config = {
   api: { bodyParser: false },
@@ -68,8 +69,16 @@ const createNewPost: NextApiHandler = async (req, res) => {
 
 const readPosts: NextApiHandler = async (req, res) => {
   try {
-    const { limit, pageNo } = req.query as { limit: string; pageNo: string };
-    const posts = await readPostsFromDb(parseInt(limit), parseInt(pageNo));
+    const { limit, pageNo, skip } = req.query as {
+      limit: string;
+      pageNo: string;
+      skip: string;
+    };
+    const posts = await readPostsFromDb(
+      parseInt(limit),
+      parseInt(pageNo),
+      parseInt(skip)
+    );
     res.json({ posts: formatPosts(posts) });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

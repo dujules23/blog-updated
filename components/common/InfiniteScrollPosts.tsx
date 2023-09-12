@@ -70,7 +70,7 @@ const InfiniteScrollPosts: FC<Props> = ({
                 key={post.slug}
                 controls={showControls}
                 onDeleteClick={() => handleOnDeleteClick(post)}
-                busy={removing}
+                busy={post.id == postToRemove?.id && removing}
               />
             ))}
           </div>
