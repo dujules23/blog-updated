@@ -96,7 +96,7 @@ const GalleryModal: FC<Props> = ({
                     <Image
                       src={selectedImage}
                       object-fit="contain"
-                      alt="gallery"
+                      alt="selected"
                     />
                   </div>
                 </>

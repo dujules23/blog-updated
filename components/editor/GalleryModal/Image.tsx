@@ -9,7 +9,7 @@ interface Props {
   alt: string;
 }
 
-const Image: FC<Props> = ({ src, selected, onClick }): JSX.Element => {
+const Image: FC<Props> = ({ src, alt, selected, onClick }): JSX.Element => {
   return (
     <div
       onClick={onClick}
@@ -19,7 +19,7 @@ const Image: FC<Props> = ({ src, selected, onClick }): JSX.Element => {
         src={src}
         width={200}
         height={200}
-        alt="gallery"
+        alt={alt}
         objectFit="cover"
         className="bg-secondary-light hover:scale-110 transition"
       />
