@@ -89,7 +89,7 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   try {
     // connect to database
-    await dbConnect;
+    await dbConnect();
     const post = await Post.findOne({ slug: params?.slug });
     if (!post) return { notFound: true };
 
@@ -111,6 +111,7 @@ export const getStaticProps: GetStaticProps<
       revalidate: 60,
     };
   } catch (error) {
+    console.log(error);
     return {
       notFound: true,
     };
