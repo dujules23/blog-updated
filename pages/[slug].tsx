@@ -13,7 +13,7 @@ import Image from "next/image";
 import dateFormat from "dateformat";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
-
+// seems to be an issue in production, check postman for 404 issue
 const SinglePost: NextPage<Props> = ({ post }) => {
   const { title, content, tags, meta, slug, thumbnail, createdAt } = post;
   return (
