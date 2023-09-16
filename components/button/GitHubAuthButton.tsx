@@ -17,7 +17,7 @@ export const GitHubAuthButton: FC<Props> = ({
   // conditionally renders styles needed, then use classNames to apply the correct styles
   const getStyle = useCallback(() => {
     if (lightOnly) return "text-primary-dark bg-primary";
-    return "bg-primary-dark dark:bg-primary dark:text-primary dark text primary";
+    return "bg-primary-dark dark:bg-primary dark:text-primary-dark text-primary";
   }, [lightOnly]);
 
   return (

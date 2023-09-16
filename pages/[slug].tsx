@@ -11,14 +11,19 @@ import { Trykker } from "next/font/google";
 import parse from "html-react-parser";
 import Image from "next/image";
 import dateFormat from "dateformat";
+import useAuth from "@/hooks/useAuth";
+import CommentForm from "@/components/common/CommentForm";
+import { GitHubAuthButton } from "@/components/button";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 // seems to be an issue in production, check postman for 404 issue
 const SinglePost: NextPage<Props> = ({ post }) => {
+  const userProfile = useAuth();
+
   const { title, content, tags, meta, slug, thumbnail, createdAt } = post;
   return (
     <DefaultLayout title={title} desc={meta}>
-      <div className="pb-20">
+      <div className="">
         {thumbnail ? (
           <div className="relative aspect-video">
             <Image src={thumbnail} alt={title} layout="fill" />
@@ -38,6 +43,19 @@ const SinglePost: NextPage<Props> = ({ post }) => {
 
         <div className="prose prose-lg dark:prose-invert max-w-full mx-auto">
           {parse(content)}
+        </div>
+        {/* Comment form */}
+        <div className="py-20">
+          {userProfile ? (
+            <CommentForm />
+          ) : (
+            <div className="flex flex-col items-end space-y-2">
+              <h3 className="text-secondary-dark text-x1 font-semibold">
+                Log in to add comment
+              </h3>
+              <GitHubAuthButton />
+            </div>
+          )}
         </div>
       </div>
     </DefaultLayout>
