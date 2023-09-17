@@ -6,7 +6,7 @@ import Link from "next/link";
 import { GitHubAuthButton } from "@/components/button";
 import ProfileHead from "../ProfileHead";
 import DropdownOptions, { dropDownOptions } from "../DropdownOptions";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { UserProfile } from "@/utils/types";
 import useDarkMode from "@/hooks/useDarkMode";
@@ -30,11 +30,6 @@ const UserNav: FC<Props> = (props): JSX.Element => {
   const isAdmin = profile && profile.role === "admin";
 
   const { toggleTheme } = useDarkMode();
-
-  // function for handling login with Github
-  const handleLoginWithGitHub = async () => {
-    const res = await signIn("github");
-  };
 
   const dropDownOptions: dropDownOptions = isAdmin
     ? [
@@ -72,7 +67,7 @@ const UserNav: FC<Props> = (props): JSX.Element => {
             head={<ProfileHead nameInitial="D" lightOnly />}
           />
         ) : (
-          <GitHubAuthButton onClick={handleLoginWithGitHub} lightOnly />
+          <GitHubAuthButton lightOnly />
         )}
       </div>
     </div>
