@@ -26,7 +26,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
       <div className="">
         {thumbnail ? (
           <div className="relative aspect-video">
-            <Image src={thumbnail} alt={title} layout="fill" />
+            <Image src={thumbnail} alt={title} fill />
           </div>
         ) : null}
 
@@ -47,7 +47,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
         {/* Comment form */}
         <div className="py-20">
           {userProfile ? (
-            <CommentForm />
+            <CommentForm title="Add comment" />
           ) : (
             <div className="flex flex-col items-end space-y-2">
               <h3 className="text-secondary-dark text-x1 font-semibold">
