@@ -2,7 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import { isAuth } from "@/lib/utils";
 import { commentValidationSchema, validateSchema } from "@/lib/validator";
 import Comment from "@/models/Comment";
-import Post from "@/models/Post";
+import { isValidObjectId } from "mongoose";
 import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = (req, res) => {
@@ -10,7 +10,7 @@ const handler: NextApiHandler = (req, res) => {
 
   switch (method) {
     case "POST":
-      return createNewComment(req, res);
+      return addReplyToComment(req, res);
 
     default:
       res.status(404).send("Not Found.");
@@ -18,28 +18,40 @@ const handler: NextApiHandler = (req, res) => {
 };
 
 // creating new comment, checks if the user is authorized, if not, returns 403 status
-const createNewComment: NextApiHandler = async (req, res) => {
+const addReplyToComment: NextApiHandler = async (req, res) => {
   const user = await isAuth(req, res);
   if (!user) return res.status(403).json({ error: "unauthorized request!" });
 
   const error = validateSchema(commentValidationSchema, req.body);
   if (error) return res.status(422).json({ error });
 
-  // creating the comment
-  await dbConnect();
-  const { belongsTo, content } = req.body;
-  const post = await Post.findById(belongsTo);
-  if (!post) return res.status(401).json({ error: "Invalid Post" });
+  const { repliedTo } = req.body;
+  if (!isValidObjectId(repliedTo))
+    return res.status(422).json({ error: "invalid comment id!" });
 
-  const comment = new Comment({
-    content,
-    belongsTo,
-    owner: user.id,
+  await dbConnect();
+
+  const chiefComment = await Comment.findOne({
+    _id: repliedTo,
     chiefComment: true,
   });
+  if (!chiefComment)
+    return res.status(404).json({ error: "Comment not found!" });
 
-  await comment.save();
-  res.status(201).json(comment);
+  const replyComment = new Comment({
+    owner: user.id,
+    repliedTo,
+    content: req.body.content,
+  });
+
+  if (chiefComment.replies)
+    chiefComment.replies = [...chiefComment.replies, replyComment._id];
+
+  // saves the comments
+  await chiefComment.save();
+  await replyComment.save();
+
+  res.status(201).json({ comment: replyComment });
 };
 
 export default handler;
