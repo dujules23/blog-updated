@@ -71,3 +71,10 @@ export const isAdmin = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = session?.user as UserProfile;
   return user && user.role === "admin";
 };
+
+// function that checks if the user is authorized
+export const isAuth = async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await getServerSession(req, res, authOptions);
+  const user = session?.user;
+  if (user) return user as UserProfile;
+};
