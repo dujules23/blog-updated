@@ -9,6 +9,7 @@ const nextConfig = {
       "www.gameshub.com",
       "i.ytimg.com",
       "media.eventhubs.com",
+      "avatars.githubusercontent.com",
     ],
   },
 };
