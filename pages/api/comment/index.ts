@@ -15,6 +15,8 @@ const handler: NextApiHandler = (req, res) => {
       return createNewComment(req, res);
     case "DELETE":
       return removeComment(req, res);
+    case "PATCH":
+      return updateComment(req, res);
 
     default:
       res.status(404).send("Not Found.");
@@ -46,6 +48,7 @@ const createNewComment: NextApiHandler = async (req, res) => {
   await comment.save();
   res.status(201).json(comment);
 };
+// endpoint for removing a comment
 const removeComment: NextApiHandler = async (req, res) => {
   // check if the user is authorized
   const user = await isAuth(req, res);
@@ -83,6 +86,32 @@ const removeComment: NextApiHandler = async (req, res) => {
   // then remove the actual comment
   await Comment.findByIdAndDelete(commentId);
   res.json({ removed: true });
+};
+
+const updateComment: NextApiHandler = async (req, res) => {
+  // check if the user is authorized
+  const user = await isAuth(req, res);
+  if (!user) return res.status(403).json({ error: "unauthorized request!" });
+
+  const error = validateSchema(commentValidationSchema, req.body);
+  if (error) return res.status(422).json({ error });
+
+  const { commentId } = req.query;
+  if (!commentId || !isValidObjectId(commentId))
+    return res.status(422).json({ error: "Invalid request!" });
+
+  await dbConnect();
+
+  const comment = await Comment.findOne({
+    _id: commentId,
+    owner: user.id,
+  });
+
+  if (!comment) return res.status(404).json({ error: "Comment not found!" });
+
+  comment.content = req.body.content;
+  await comment.save();
+  res.json(comment);
 };
 
 export default handler;
