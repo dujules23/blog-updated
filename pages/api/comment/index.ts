@@ -17,6 +17,8 @@ const handler: NextApiHandler = (req, res) => {
       return removeComment(req, res);
     case "PATCH":
       return updateComment(req, res);
+    case "GET":
+      return readComments(req, res);
 
     default:
       res.status(404).send("Not Found.");
@@ -111,6 +113,30 @@ const updateComment: NextApiHandler = async (req, res) => {
 
   comment.content = req.body.content;
   await comment.save();
+  res.json(comment);
+};
+
+const readComments: NextApiHandler = async (req, res) => {
+  const { belongsTo } = req.query;
+
+  if (!belongsTo || !isValidObjectId(belongsTo))
+    return res.status(422).json({ error: "Invalid request!" });
+
+  await dbConnect();
+
+  const comment = await Comment.findOne({ belongsTo })
+    .populate({
+      path: "owner",
+      select: "name avatar",
+    })
+    .populate({
+      path: "replies",
+      populate: {
+        path: "owner",
+        select: "name avatar",
+      },
+    })
+    .select("createdAt likes content repliedTo");
   res.json(comment);
 };
 
