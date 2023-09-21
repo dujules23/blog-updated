@@ -48,20 +48,22 @@ const createNewComment: NextApiHandler = async (req, res) => {
 };
 const removeComment: NextApiHandler = async (req, res) => {
   // check if the user is authorized
-  // const user = await isAuth(req, res);
-  // if (!user) return res.status(403).json({ error: "unauthorized request!" });
+  const user = await isAuth(req, res);
+  if (!user) return res.status(403).json({ error: "unauthorized request!" });
 
   // if chief comment removes other related comments (replies) as well.
 
   const { commentId } = req.query;
-  console.log(isValidObjectId(commentId));
   if (!commentId || !isValidObjectId(commentId))
     return res.status(422).json({ error: "Invalid request!" });
 
+  await dbConnect();
+
   const comment = await Comment.findOne({
     _id: commentId,
-    owner: "64f6af75a16d819b21b7adb0",
+    owner: user.id,
   });
+
   if (!comment) return res.status(404).json({ error: "Comment not found!" });
 
   // if chief comment removes other related comments (replies) as well.
@@ -82,41 +84,5 @@ const removeComment: NextApiHandler = async (req, res) => {
   await Comment.findByIdAndDelete(commentId);
   res.json({ removed: true });
 };
-
-// const removeComment: NextApiHandler = async (req, res) => {
-//   // check if the user is authorized
-//   // const user = await isAuth(req, res);
-//   // if (!user) return res.status(403).json({ error: "unauthorized request!" });
-
-//   // /api/comment?commentId=commentid
-
-//   const { commentId } = req.query;
-
-//   if (!commentId || isValidObjectId(commentId))
-//     if (!commentId) return res.status(422).json({ error: "Invalid request! " });
-
-//   const comment = await Comment.findOne({
-//     _id: commentId,
-//     owner: "64f6af75a16d819b21b7adb0",
-//   });
-//   if (!comment) return res.status(404).json({ error: "Comment not found! " });
-
-//   // if chief comment remove other related comments (replies) as well.
-//   if (comment.chiefComment) await Comment.deleteMany({ repliedTo: commentId });
-//   else {
-//     // if this is the reply comment remove from the chiefComments replies section.
-//     const chiefComment = await Comment.findById(comment.repliedTo);
-//     if (chiefComment?.replies?.includes(commentId as any)) {
-//       chiefComment.replies = chiefComment.replies.filter(
-//         (cId) => cId.toString() !== commentId
-//       );
-
-//       await chiefComment.save();
-//     }
-//   }
-//   // then remove the actual comment
-//   await Comment.findByIdAndDelete(commentId);
-//   res.json({ removed: true });
-// };
 
 export default handler;
