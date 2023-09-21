@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import { isAuth } from "@/lib/utils";
+import { formatComment, isAuth } from "@/lib/utils";
 import { commentValidationSchema, validateSchema } from "@/lib/validator";
 import Comment from "@/models/Comment";
 import Post from "@/models/Post";
@@ -117,6 +117,7 @@ const updateComment: NextApiHandler = async (req, res) => {
 };
 
 const readComments: NextApiHandler = async (req, res) => {
+  const user = await isAuth(req, res);
   const { belongsTo } = req.query;
 
   if (!belongsTo || !isValidObjectId(belongsTo))
@@ -137,7 +138,13 @@ const readComments: NextApiHandler = async (req, res) => {
       },
     })
     .select("createdAt likes content repliedTo");
-  res.json(comment);
+
+  if (!comment) return res.json({ comment });
+  const formattedComment = {
+    ...formatComment(comment, user),
+    replies: comment.replies?.map((c: any) => formatComment(c, user)),
+  };
+  res.json({ comment: formattedComment });
 };
 
 export default handler;
