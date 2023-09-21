@@ -126,7 +126,7 @@ const readComments: NextApiHandler = async (req, res) => {
 
   await dbConnect();
 
-  const comment = await Comment.findOne({ belongsTo })
+  const comments = await Comment.find({ belongsTo })
     .populate({
       path: "owner",
       select: "name avatar",
@@ -140,12 +140,14 @@ const readComments: NextApiHandler = async (req, res) => {
     })
     .select("createdAt likes content repliedTo");
 
-  if (!comment) return res.json({ comment });
-  const formattedComment = {
-    ...formatComment(comment, user),
-    replies: comment.replies?.map((c: any) => formatComment(c, user)),
-  };
-  res.json({ comment: formattedComment });
+  if (!comments) return res.json({ comment: comments });
+  const formattedComment = comments.map((comment) => {
+    return {
+      ...formatComment(comment, user),
+      replies: comment.replies?.map((c: any) => formatComment(c, user)),
+    };
+  });
+  res.json({ comments: formattedComment });
 };
 
 export default handler;
