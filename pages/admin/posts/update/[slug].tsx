@@ -23,8 +23,6 @@ const Update: NextPage<Props> = ({ post }) => {
       const formData = generateFormData(post);
       // edit our updated post via endpoint plus the post Id
       const { data } = await axios.patch("/api/posts/" + post.id, formData);
-
-      console.log(data);
     } catch (error: any) {
       console.log(error.response.data);
     }

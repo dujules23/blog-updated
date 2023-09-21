@@ -7,20 +7,15 @@ import {
   InferGetStaticPropsType,
   NextPage,
 } from "next";
-import { Trykker } from "next/font/google";
 import parse from "html-react-parser";
 import Image from "next/image";
 import dateFormat from "dateformat";
-import useAuth from "@/hooks/useAuth";
-import CommentForm from "@/components/common/CommentForm";
-import { GitHubAuthButton } from "@/components/button";
+import Comments from "@/components/common/Comments";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 // seems to be an issue in production, check postman for 404 issue
 const SinglePost: NextPage<Props> = ({ post }) => {
-  const userProfile = useAuth();
-
-  const { title, content, tags, meta, slug, thumbnail, createdAt } = post;
+  const { id, title, content, tags, meta, slug, thumbnail, createdAt } = post;
   return (
     <DefaultLayout title={title} desc={meta}>
       <div className="">
@@ -45,18 +40,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
           {parse(content)}
         </div>
         {/* Comment form */}
-        <div className="py-20">
-          {userProfile ? (
-            <CommentForm title="Add comment" />
-          ) : (
-            <div className="flex flex-col items-end space-y-2">
-              <h3 className="text-secondary-dark text-x1 font-semibold">
-                Log in to add comment
-              </h3>
-              <GitHubAuthButton />
-            </div>
-          )}
-        </div>
+        <Comments belongsTo={id} />
       </div>
     </DefaultLayout>
   );

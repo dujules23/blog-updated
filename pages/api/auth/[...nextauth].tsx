@@ -23,7 +23,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: GIT_CLIENT_SECRET as string,
       async profile(profile) {
         // find out the user
-        console.log(profile);
         await dbConnect();
         const oldUser = await User.findOne({ email: profile.email });
         const userProfile = {
