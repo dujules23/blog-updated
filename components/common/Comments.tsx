@@ -45,10 +45,10 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
         </div>
       )}
 
-      {comments?.map(({ id, owner }) => {
+      {comments?.map(({ id, owner, createdAt, content }) => {
         return (
           <div key={id}>
-            <CommentCard profile={owner} />
+            <CommentCard profile={owner} date={createdAt} content={content} />
           </div>
         );
       })}
