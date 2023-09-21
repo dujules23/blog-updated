@@ -2,6 +2,7 @@ import { FC } from "react";
 import { GitHubAuthButton } from "../button";
 import CommentForm from "./CommentForm";
 import useAuth from "@/hooks/useAuth";
+import axios from "axios";
 
 interface Props {
   belongsTo: string;
@@ -10,8 +11,12 @@ interface Props {
 const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
   const userProfile = useAuth();
 
-  const handleNewCommentSubmit = (content: string) => {
-    console.log(content);
+  const handleNewCommentSubmit = async (content: string) => {
+    const comment = await axios
+      .post("/api/comment", { content, belongsTo })
+      .then(({ data }) => data.comment)
+      .catch((err) => console.log(err));
+    console.log(comment);
   };
 
   return (
