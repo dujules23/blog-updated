@@ -74,6 +74,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
       )}
 
       {comments?.map((comment) => {
+        const { replies } = comment;
         return (
           <div key={comment.id}>
             <CommentCard
@@ -84,18 +85,25 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
               onUpdateSubmit={(content) => console.log("update: ", content)}
             />
 
-            {comment.replies?.map((reply) => {
-              return (
-                <CommentCard
-                  key={reply.id}
-                  comment={reply}
-                  onReplySubmit={(content) =>
-                    handleReplySubmit({ content, repliedTo: comment.id })
-                  }
-                  onUpdateSubmit={(content) => console.log("update: ", content)}
-                />
-              );
-            })}
+            {replies?.length ? (
+              <div className="w-[93%] ml-auto space-y-3">
+                <h1 className="text-secondary-dark mb3">Replies</h1>
+                {replies.map((reply) => {
+                  return (
+                    <CommentCard
+                      key={reply.id}
+                      comment={reply}
+                      onReplySubmit={(content) =>
+                        handleReplySubmit({ content, repliedTo: comment.id })
+                      }
+                      onUpdateSubmit={(content) =>
+                        console.log("update: ", content)
+                      }
+                    />
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
         );
       })}

@@ -50,6 +50,7 @@ const CommentCard: FC<Props> = ({
       // if there is no initialState, we want to reply
       onReplySubmit && onReplySubmit(comment);
     }
+    hideReplyForm();
   };
 
   return (
