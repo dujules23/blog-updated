@@ -79,12 +79,13 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
           <div key={comment.id}>
             <CommentCard
               comment={comment}
+              showControls={userProfile?.id === comment.owner.id}
               onReplySubmit={(content) =>
                 handleReplySubmit({ content, repliedTo: comment.id })
               }
               onUpdateSubmit={(content) => console.log("update: ", content)}
             />
-
+            {/* If there are replies, render them under the comment that was replied to */}
             {replies?.length ? (
               <div className="w-[93%] ml-auto space-y-3">
                 <h1 className="text-secondary-dark mb3">Replies</h1>
@@ -93,6 +94,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
                     <CommentCard
                       key={reply.id}
                       comment={reply}
+                      showControls={userProfile?.id === reply.owner.id}
                       onReplySubmit={(content) =>
                         handleReplySubmit({ content, repliedTo: comment.id })
                       }

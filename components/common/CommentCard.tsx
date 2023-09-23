@@ -12,6 +12,7 @@ import { CommentResponse } from "@/utils/types";
 
 interface Props {
   comment: CommentResponse;
+  showControls?: boolean;
   onUpdateSubmit?(content: string): void;
   onReplySubmit?(content: string): void;
 }
@@ -20,6 +21,7 @@ const CommentCard: FC<Props> = ({
   comment,
   onReplySubmit,
   onUpdateSubmit,
+  showControls = false,
 }): JSX.Element => {
   const { owner, createdAt, content } = comment;
   const { name, avatar } = owner;
@@ -72,14 +74,18 @@ const CommentCard: FC<Props> = ({
             <BsFillReplyAllFill />
             <span>Reply</span>
           </Button>
-          <Button onClick={handleOnEditClick}>
-            <BsPencilSquare />
-            <span>Edit</span>
-          </Button>
-          <Button>
-            <BsFillTrashFill />
-            <span>Delete</span>
-          </Button>
+          {showControls && (
+            <>
+              <Button onClick={handleOnEditClick}>
+                <BsPencilSquare />
+                <span>Edit</span>
+              </Button>
+              <Button>
+                <BsFillTrashFill />
+                <span>Delete</span>
+              </Button>
+            </>
+          )}
         </div>
         {showForm && (
           <div className="mt-3">
