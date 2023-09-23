@@ -48,7 +48,13 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
       {comments?.map(({ id, owner, createdAt, content }) => {
         return (
           <div key={id}>
-            <CommentCard profile={owner} date={createdAt} content={content} />
+            <CommentCard
+              profile={owner}
+              date={createdAt}
+              content={content}
+              onReplySubmit={(content) => console.log("reply: ", content)}
+              onUpdateSubmit={(content) => console.log("update: ", content)}
+            />
           </div>
         );
       })}

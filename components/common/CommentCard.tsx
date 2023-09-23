@@ -18,9 +18,17 @@ interface Props {
   profile: CommentOwnersProfile;
   date: string;
   content: string;
+  onUpdateSubmit?(content: string): void;
+  onReplySubmit?(content: string): void;
 }
 
-const CommentCard: FC<Props> = ({ profile, date, content }): JSX.Element => {
+const CommentCard: FC<Props> = ({
+  profile,
+  date,
+  content,
+  onReplySubmit,
+  onUpdateSubmit,
+}): JSX.Element => {
   const { name, avatar } = profile;
   const [showForm, setShowForm] = useState(false);
   const [initialState, setInitialState] = useState("");
@@ -41,7 +49,15 @@ const CommentCard: FC<Props> = ({ profile, date, content }): JSX.Element => {
     displayReplyForm();
     setInitialState(content);
   };
-  const handleCommentSubmit = () => {};
+  const handleCommentSubmit = (comment: string) => {
+    // means we want to update
+    if (initialState) {
+      onUpdateSubmit && onUpdateSubmit(comment);
+    } else {
+      // if there is no initialState, we want to reply
+      onReplySubmit && onReplySubmit(comment);
+    }
+  };
 
   return (
     <div className="flex space-x-3">
