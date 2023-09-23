@@ -33,6 +33,30 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
     setComments([...updatedComments]);
   };
 
+  const updateEditedComment = (newComment: CommentResponse) => {
+    if (!comments) return;
+
+    let updatedComments = [...comments];
+    if (newComment.chiefComment) {
+      const index = updatedComments.findIndex(({ id }) => id === newComment.id);
+      updatedComments[index].content = newComment.content;
+    } else {
+      const chiefCommentIndex = updatedComments.findIndex(
+        ({ id }) => id === newComment.repliedTo
+      );
+
+      let newReplies = updatedComments[chiefCommentIndex].replies;
+      newReplies = newReplies?.map((comment) => {
+        if (comment.id === newComment.id) comment.content = newComment.content;
+        return comment;
+      });
+
+      updatedComments[chiefCommentIndex].replies = newReplies;
+    }
+
+    setComments([...updatedComments]);
+  };
+
   const handleNewCommentSubmit = async (content: string) => {
     const newComment = await axios
       .post("/api/comment", { content, belongsTo })
@@ -41,6 +65,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
     if (newComment && comments) setComments([...comments, newComment]);
     else setComments([newComment]);
   };
+
   // makes call to handle comment replies
   const handleReplySubmit = (replyComment: {
     content: string;
@@ -49,6 +74,13 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
     axios
       .post("/api/comment/add-reply", replyComment)
       .then(({ data }) => insertNewReplyComments(data.comment))
+      .catch((err) => console.log(err));
+  };
+
+  const handleUpdateSubmit = (content: string, id: string) => {
+    axios
+      .patch(`/api/comment?commentId=${id}`, { content })
+      .then(({ data }) => updateEditedComment(data.comment))
       .catch((err) => console.log(err));
   };
 
@@ -83,7 +115,9 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
               onReplySubmit={(content) =>
                 handleReplySubmit({ content, repliedTo: comment.id })
               }
-              onUpdateSubmit={(content) => console.log("update: ", content)}
+              onUpdateSubmit={(content) =>
+                handleUpdateSubmit(content, comment.id)
+              }
             />
             {/* If there are replies, render them under the comment that was replied to */}
             {replies?.length ? (
@@ -99,7 +133,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
                         handleReplySubmit({ content, repliedTo: comment.id })
                       }
                       onUpdateSubmit={(content) =>
-                        console.log("update: ", content)
+                        handleUpdateSubmit(content, reply.id)
                       }
                     />
                   );
