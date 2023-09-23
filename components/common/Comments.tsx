@@ -15,6 +15,24 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
 
   const userProfile = useAuth();
 
+  const insertNewReplyComments = (reply: CommentResponse) => {
+    if (!comments) return;
+    let updatedComments = [...comments];
+
+    const chiefCommentIndex = updatedComments.findIndex(
+      ({ id }) => id === reply.repliedTo
+    );
+
+    const { replies } = updatedComments[chiefCommentIndex];
+    if (replies) {
+      updatedComments[chiefCommentIndex].replies = [...replies, reply];
+    } else {
+      updatedComments[chiefCommentIndex].replies = [reply];
+    }
+
+    setComments([...updatedComments]);
+  };
+
   const handleNewCommentSubmit = async (content: string) => {
     const newComment = await axios
       .post("/api/comment", { content, belongsTo })
@@ -30,7 +48,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
   }) => {
     axios
       .post("/api/comment/add-reply", replyComment)
-      .then(({ data }) => console.log(data.comment))
+      .then(({ data }) => insertNewReplyComments(data.comment))
       .catch((err) => console.log(err));
   };
 
@@ -65,6 +83,19 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
               }
               onUpdateSubmit={(content) => console.log("update: ", content)}
             />
+
+            {comment.replies?.map((reply) => {
+              return (
+                <CommentCard
+                  key={reply.id}
+                  comment={reply}
+                  onReplySubmit={(content) =>
+                    handleReplySubmit({ content, repliedTo: comment.id })
+                  }
+                  onUpdateSubmit={(content) => console.log("update: ", content)}
+                />
+              );
+            })}
           </div>
         );
       })}
