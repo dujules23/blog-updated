@@ -8,28 +8,21 @@ import {
   BsPencilSquare,
 } from "react-icons/bs";
 import CommentForm from "./CommentForm";
-
-interface CommentOwnersProfile {
-  name: string;
-  avatar?: string;
-}
+import { CommentResponse } from "@/utils/types";
 
 interface Props {
-  profile: CommentOwnersProfile;
-  date: string;
-  content: string;
+  comment: CommentResponse;
   onUpdateSubmit?(content: string): void;
   onReplySubmit?(content: string): void;
 }
 
 const CommentCard: FC<Props> = ({
-  profile,
-  date,
-  content,
+  comment,
   onReplySubmit,
   onUpdateSubmit,
 }): JSX.Element => {
-  const { name, avatar } = profile;
+  const { owner, createdAt, content } = comment;
+  const { name, avatar } = owner;
   const [showForm, setShowForm] = useState(false);
   const [initialState, setInitialState] = useState("");
 
@@ -67,7 +60,7 @@ const CommentCard: FC<Props> = ({
           {name}
         </h1>
         <span className="text-sm text-secondary-dark">
-          {dateFormat(date, "d-mmm-yyyy")}
+          {dateFormat(createdAt, "d-mmm-yyyy")}
         </span>
         <div className="text-primary-dark dark:text-primary">
           {parse(content)}
