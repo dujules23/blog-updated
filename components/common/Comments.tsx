@@ -60,6 +60,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
 
     setComments([...updatedComments]);
   };
+
   const updateDeletedComments = (deletedComment: CommentResponse) => {
     if (!comments) return;
     let newComments = [...comments];
@@ -72,6 +73,31 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
       );
       const newReplies = newComments[chiefCommentIndex].replies?.filter(
         ({ id }) => id !== deletedComment.id
+      );
+
+      newComments[chiefCommentIndex].replies = newReplies;
+    }
+    setComments([...newComments]);
+  };
+
+  const updateLikedComments = (likedComment: CommentResponse) => {
+    if (!comments) return;
+    let newComments = [...comments];
+
+    if (likedComment.chiefComment)
+      newComments = newComments.map((comment) => {
+        if (comment.id === likedComment.id) return likedComment;
+        return comment;
+      });
+    else {
+      const chiefCommentIndex = newComments.findIndex(
+        ({ id }) => id === likedComment.repliedTo
+      );
+      const newReplies = newComments[chiefCommentIndex].replies?.map(
+        (reply) => {
+          if (reply.id === likedComment.id) return likedComment;
+          return reply;
+        }
       );
 
       newComments[chiefCommentIndex].replies = newReplies;
@@ -110,10 +136,12 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
     setCommentToDelete(comment);
     setShowConfirmModal(true);
   };
+
   const handleOnDeleteCancel = () => {
     setCommentToDelete(null);
     setShowConfirmModal(false);
   };
+
   const handleOnDeleteConfirm = () => {
     if (!commentToDelete) return;
     axios
@@ -126,6 +154,13 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
         setCommentToDelete(null);
         setShowConfirmModal(false);
       });
+  };
+
+  const handleOnLikeClick = (comment: CommentResponse) => {
+    axios
+      .post("/api/comment/update-like", { commentId: comment.id })
+      .then(({ data }) => updateLikedComments(data.comment))
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -163,6 +198,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
                 handleUpdateSubmit(content, comment.id)
               }
               onDeleteClick={() => handleOnDeleteClick(comment)}
+              onLikeClick={() => handleOnLikeClick(comment)}
             />
             {/* If there are replies, render them under the comment that was replied to */}
             {replies?.length ? (
@@ -181,6 +217,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
                         handleUpdateSubmit(content, reply.id)
                       }
                       onDeleteClick={() => handleOnDeleteClick(reply)}
+                      onLikeClick={() => handleOnLikeClick(comment)}
                     />
                   );
                 })}
