@@ -5,6 +5,7 @@ import useAuth from "@/hooks/useAuth";
 import axios from "axios";
 import { CommentResponse } from "@/utils/types";
 import CommentCard from "./CommentCard";
+import ConfirmModal from "./ConfirmModal";
 
 interface Props {
   belongsTo: string;
@@ -12,6 +13,9 @@ interface Props {
 
 const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
   const [comments, setComments] = useState<CommentResponse[]>();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] =
+    useState<CommentResponse | null>(null);
 
   const userProfile = useAuth();
 
@@ -84,6 +88,18 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
       .catch((err) => console.log(err));
   };
 
+  const handleOnDeleteClick = (comment: CommentResponse) => {
+    setCommentToDelete(comment);
+    setShowConfirmModal(true);
+  };
+  const handleOnDeleteCancel = () => {
+    setCommentToDelete(null);
+    setShowConfirmModal(false);
+  };
+  const handleOnDeleteConfirm = () => {
+    console.log(commentToDelete);
+  };
+
   useEffect(() => {
     axios(`/api/comment?belongsTo=${belongsTo}`)
       .then(({ data }) => {
@@ -118,6 +134,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
               onUpdateSubmit={(content) =>
                 handleUpdateSubmit(content, comment.id)
               }
+              onDeleteClick={() => handleOnDeleteClick(comment)}
             />
             {/* If there are replies, render them under the comment that was replied to */}
             {replies?.length ? (
@@ -135,6 +152,7 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
                       onUpdateSubmit={(content) =>
                         handleUpdateSubmit(content, reply.id)
                       }
+                      onDeleteClick={() => handleOnDeleteClick(reply)}
                     />
                   );
                 })}
@@ -143,6 +161,14 @@ const Comments: FC<Props> = ({ belongsTo }): JSX.Element => {
           </div>
         );
       })}
+
+      <ConfirmModal
+        visible={showConfirmModal}
+        title="Are you sure?"
+        subTitle="This action will remove this comment and replies if this is the main comment!"
+        onCancel={handleOnDeleteCancel}
+        onConfirm={handleOnDeleteConfirm}
+      />
     </div>
   );
 };
