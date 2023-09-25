@@ -1,4 +1,5 @@
 import ContentWrapper from "@/components/admin/ContentWrapper";
+import LatestCommentListCard from "@/components/admin/LatestCommentListCard";
 import LatestPostListCard from "@/components/admin/LatestPostListCard";
 import AdminNav from "@/components/common/nav/AdminNav";
 import AdminLayout from "@/components/layout/AdminLayout";
@@ -18,7 +19,7 @@ const Admin: NextPage<Props> = () => {
           />
         </ContentWrapper>
         <ContentWrapper seeAllRoute="/admin" title="Latest Comments">
-          <></>
+          {/* <LatestCommentListCard comment={} /> */}
         </ContentWrapper>
       </div>
     </AdminLayout>
