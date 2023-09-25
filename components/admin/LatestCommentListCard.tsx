@@ -3,21 +3,7 @@ import ProfileIcon from "../common/ProfileIcon";
 import parse from "html-react-parser";
 import { trimText } from "@/utils/helper";
 import { BsBoxArrowUpRight } from "react-icons/bs";
-
-interface LatestComment {
-  id: string;
-  owner: {
-    id: string;
-    name: string;
-    avatar?: string;
-  };
-  content: string;
-  belongsTo: {
-    id: string;
-    title: string;
-    slug: string;
-  };
-}
+import { LatestComment } from "@/utils/types";
 
 interface Props {
   comment: LatestComment;
