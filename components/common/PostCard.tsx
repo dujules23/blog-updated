@@ -4,6 +4,7 @@ import dateformat from "dateformat";
 import { FC } from "react";
 import Link from "next/link";
 import { spawn } from "child_process";
+import { trimText } from "@/utils/helper";
 
 interface Props {
   post: PostDetail;
@@ -12,10 +13,6 @@ interface Props {
   onDeleteClick?(): void;
 }
 // function that trims text
-const trimText = (text: string, trimBy: number) => {
-  if (text.length <= trimBy) return text;
-  return text.substring(0, trimBy).trim() + "...";
-};
 
 const PostCard: FC<Props> = ({
   controls = false,
