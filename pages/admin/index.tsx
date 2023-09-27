@@ -1,6 +1,7 @@
 import ContentWrapper from "@/components/admin/ContentWrapper";
 import LatestCommentListCard from "@/components/admin/LatestCommentListCard";
 import LatestPostListCard from "@/components/admin/LatestPostListCard";
+import LatestUserTable from "@/components/admin/LatestUserTable";
 import AdminNav from "@/components/common/nav/AdminNav";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { LatestComment, PostDetail } from "@/utils/types";
@@ -43,6 +44,22 @@ const Admin: NextPage<Props> = () => {
           {latestComments?.map((comment) => {
             return <LatestCommentListCard key={comment.id} comment={comment} />;
           })}
+        </ContentWrapper>
+      </div>
+
+      {/* Latest users */}
+      <div className="max-w-[500px]">
+        <ContentWrapper title="Latest Users" seeAllRoute="/admin/users">
+          <LatestUserTable
+            users={[
+              {
+                name: "Durrell",
+                id: "1",
+                email: "d@email.com",
+                provider: "github",
+              },
+            ]}
+          />
         </ContentWrapper>
       </div>
     </AdminLayout>
