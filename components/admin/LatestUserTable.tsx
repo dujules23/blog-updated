@@ -12,8 +12,8 @@ const LatestUserTable: FC<Props> = ({ users }): JSX.Element => {
       <table className="w-full text-left text-primary-dark dark:text-primary">
         <tbody>
           <tr className="text-left bg-secondary-dark text-primary">
-            <th className="p-2">Email</th>
             <th className="p-2">Profile</th>
+            <th className="p-2">Email</th>
             <th className="p-2">Provider</th>
           </tr>
 
