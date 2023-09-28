@@ -1,5 +1,6 @@
 import { isAdmin } from "@/lib/utils";
 import User from "@/models/User";
+import { LatestComment, LatestUserProfile } from "@/utils/types";
 import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = (req, res) => {
@@ -29,12 +30,15 @@ const getLatestUsers: NextApiHandler = async (req, res) => {
     .limit(parseInt(limit))
     .select("name email avatar provider");
 
-  const users = results.map(({ _id, name, avatar, provider }) => ({
-    id: _id,
-    name,
-    avatar,
-    provider,
-  }));
+  const users: LatestUserProfile[] = results.map(
+    ({ _id, name, email, avatar, provider }) => ({
+      id: _id.toString(),
+      name,
+      avatar,
+      provider,
+      email,
+    })
+  );
 
   res.json({ users });
 };

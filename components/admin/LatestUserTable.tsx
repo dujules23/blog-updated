@@ -3,7 +3,7 @@ import { FC } from "react";
 import ProfileIcon from "../common/ProfileIcon";
 
 interface Props {
-  users: LatestUserProfile[];
+  users?: LatestUserProfile[];
 }
 
 const LatestUserTable: FC<Props> = ({ users }): JSX.Element => {
@@ -17,7 +17,7 @@ const LatestUserTable: FC<Props> = ({ users }): JSX.Element => {
             <th className="p-2">Provider</th>
           </tr>
 
-          {users.map((profile) => {
+          {users?.map((profile) => {
             return (
               <tr className="border-b" key={profile.id}>
                 <td className="py-2">

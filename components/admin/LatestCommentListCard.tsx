@@ -32,9 +32,9 @@ const LatestCommentListCard: FC<Props> = ({ comment }): JSX.Element => {
             {trimText(belongsTo.title, 30)}
           </div>
         </a>
-        <p className="text-primary-dark dark:text-primary transition">
+        <div className="text-primary-dark dark:text-primary transition">
           {parse(content)}
-        </p>
+        </div>
       </div>
     </div>
   );
