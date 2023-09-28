@@ -19,6 +19,7 @@ let currentPageNo = 0;
 const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   const [comments, setComments] = useState<CommentResponse[]>();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [reachedToEnd, setReachedToEnd] = useState(false);
   const [commentToDelete, setCommentToDelete] =
     useState<CommentResponse | null>(null);
 
@@ -175,10 +176,28 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
         `/api/comment/all?pageNo=${pageNo}}&limit=${limit}`
       );
 
+      if (!data.comments.length) {
+        currentPageNo -= 1;
+        return setReachedToEnd(true);
+      }
+
       setComments(data.comments);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleOnNextClick = () => {
+    if (reachedToEnd) return;
+    currentPageNo++;
+    fetchAllComments(currentPageNo);
+  };
+
+  const handleOnPrevClick = () => {
+    if (currentPageNo <= 0) return;
+    if (reachedToEnd) setReachedToEnd(false);
+    currentPageNo -= 1;
+    fetchAllComments(currentPageNo);
   };
 
   useEffect(() => {
@@ -257,7 +276,10 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
       })}
 
       <div className="py-10 flex justify-end">
-        <PageNavigator />
+        <PageNavigator
+          onNextClick={handleOnNextClick}
+          onPrevClick={handleOnPrevClick}
+        />
       </div>
 
       <ConfirmModal
