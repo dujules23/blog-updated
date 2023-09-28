@@ -7,7 +7,9 @@ interface Props {}
 const AdminComments: NextPage<Props> = () => {
   return (
     <AdminLayout>
-      <Comments fetchAll />
+      <div className="max-w-4xl mx-auto">
+        <Comments fetchAll />
+      </div>
     </AdminLayout>
   );
 };

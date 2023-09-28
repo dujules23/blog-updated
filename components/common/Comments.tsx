@@ -275,12 +275,14 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
         );
       })}
 
-      <div className="py-10 flex justify-end">
-        <PageNavigator
-          onNextClick={handleOnNextClick}
-          onPrevClick={handleOnPrevClick}
-        />
-      </div>
+      {fetchAll ? (
+        <div className="py-10 flex justify-end">
+          <PageNavigator
+            onNextClick={handleOnNextClick}
+            onPrevClick={handleOnPrevClick}
+          />
+        </div>
+      ) : null}
 
       <ConfirmModal
         visible={showConfirmModal}
