@@ -6,6 +6,7 @@ import axios from "axios";
 import { CommentResponse } from "@/utils/types";
 import CommentCard from "./CommentCard";
 import ConfirmModal from "./ConfirmModal";
+import PageNavigator from "./PageNavigator";
 
 interface Props {
   belongsTo?: string;
@@ -254,6 +255,10 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
           </div>
         );
       })}
+
+      <div className="py-10 flex justify-end">
+        <PageNavigator />
+      </div>
 
       <ConfirmModal
         visible={showConfirmModal}
