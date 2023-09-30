@@ -13,16 +13,15 @@ export const config = {
 const handler: NextApiHandler = async (req, res) => {
   const { method } = req;
   switch (method) {
-    case "POST":
-      return updatePostLike(req, res);
+    case "GET":
+      return updatePostLikeStatus(req, res);
     default:
       res.status(404).send("Not Found!");
   }
 };
 
-const updatePostLike: NextApiHandler = async (req, res) => {
+const updatePostLikeStatus: NextApiHandler = async (req, res) => {
   const user = await isAuth(req, res);
-  if (!user) return res.status(401).json({ error: "You are not authorized!" });
 
   const { postId } = req.query as { postId: string };
   if (!isValidObjectId(postId))
@@ -31,22 +30,18 @@ const updatePostLike: NextApiHandler = async (req, res) => {
   const post = await Post.findById(postId).select("likes");
   if (!post) return res.status(404).json({ error: "Post not found!" });
 
-  const oldLikes = post.likes || [];
-  const likedBy = user.id as any;
+  const postLikes = post.likes || [];
 
-  // unlike
-  if (oldLikes.includes(likedBy)) {
-    oldLikes.filter((like) => like.toString() !== likedBy.toSting());
+  if (!user) {
+    return res.json({
+      likesCount: postLikes.length,
+      likedByOwner: false,
+    });
   }
 
-  // like post
-  else {
-    post.likes = [...oldLikes, likedBy];
-  }
-
-  await post.save();
-  res.status(201).json({
-    newLikes: post.likes?.length,
+  res.json({
+    likesCount: postLikes.length,
+    likedByOwner: postLikes.includes(user.id as any),
   });
 };
 
