@@ -36,7 +36,7 @@ const updatePostLike: NextApiHandler = async (req, res) => {
 
   // unlike
   if (oldLikes.includes(likedBy)) {
-    oldLikes.filter((like) => like.toString() !== likedBy.toSting());
+    oldLikes.filter((like) => like.toString() !== likedBy.toString());
   }
 
   // like post
