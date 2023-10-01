@@ -21,6 +21,7 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [reachedToEnd, setReachedToEnd] = useState(false);
   const [busyCommentLike, setBusyCommentLike] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [selectedComment, setSelectedComment] =
     useState<CommentResponse | null>(null);
   const [commentToDelete, setCommentToDelete] =
@@ -115,12 +116,18 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   };
 
   const handleNewCommentSubmit = async (content: string) => {
-    const newComment = await axios
-      .post("/api/comment", { content, belongsTo })
-      .then(({ data }) => data.comment)
-      .catch((err) => console.log(err));
-    if (newComment && comments) setComments([...comments, newComment]);
-    else setComments([newComment]);
+    setSubmitting(true);
+    try {
+      const newComment = await axios
+        .post("/api/comment", { content, belongsTo })
+        .then(({ data }) => data.comment)
+        .catch((err) => console.log(err));
+      if (newComment && comments) setComments([...comments, newComment]);
+      else setComments([newComment]);
+    } catch (error) {
+      console.log(error);
+    }
+    setSubmitting(false);
   };
 
   // makes call to handle comment replies
@@ -235,6 +242,7 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
           visible={!fetchAll}
           onSubmit={handleNewCommentSubmit}
           title="Add comment"
+          busy={submitting}
         />
       ) : (
         <div className="flex flex-col items-end space-y-2">
