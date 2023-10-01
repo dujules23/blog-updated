@@ -21,6 +21,8 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [reachedToEnd, setReachedToEnd] = useState(false);
   const [busyCommentLike, setBusyCommentLike] = useState(false);
+  const [selectedComment, setSelectedComment] =
+    useState<CommentResponse | null>(null);
   const [commentToDelete, setCommentToDelete] =
     useState<CommentResponse | null>(null);
 
@@ -165,13 +167,19 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
 
   const handleOnLikeClick = (comment: CommentResponse) => {
     setBusyCommentLike(true);
+    setSelectedComment(comment);
     axios
       .post("/api/comment/update-like", { commentId: comment.id })
       .then(({ data }) => {
         updateLikedComments(data.comment);
         setBusyCommentLike(false);
+        setSelectedComment(null);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setBusyCommentLike(false);
+        setSelectedComment(comment);
+      });
   };
 
   // fetching all comments
@@ -252,7 +260,7 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
               }
               onDeleteClick={() => handleOnDeleteClick(comment)}
               onLikeClick={() => handleOnLikeClick(comment)}
-              busy={busyCommentLike}
+              busy={selectedComment?.id === comment.id && busyCommentLike}
             />
             {/* If there are replies, render them under the comment that was replied to */}
             {replies?.length ? (
@@ -272,7 +280,7 @@ const Comments: FC<Props> = ({ belongsTo, fetchAll }): JSX.Element => {
                       }
                       onDeleteClick={() => handleOnDeleteClick(reply)}
                       onLikeClick={() => handleOnLikeClick(comment)}
-                      busy={busyCommentLike}
+                      busy={selectedComment?.id === reply.id && busyCommentLike}
                     />
                   );
                 })}
