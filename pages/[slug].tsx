@@ -12,7 +12,7 @@ import Image from "next/image";
 import dateFormat from "dateformat";
 import Comments from "@/components/common/Comments";
 import LikeHeart from "@/components/common/LikeHeart";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { signIn } from "next-auth/react";
 import axios from "axios";
@@ -49,6 +49,15 @@ const SinglePost: NextPage<Props> = ({ post }) => {
       console.log(error);
     }
   };
+
+  // fetches likes for each post that have already been made.
+  useEffect(() => {
+    axios(`/api/posts/like-status?postId=${id}`)
+      .then(({ data }) =>
+        setLikes({ likedByOwner: data.likedByOwner, count: data.likesCount })
+      )
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <DefaultLayout title={title} desc={meta}>
