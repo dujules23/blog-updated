@@ -23,6 +23,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>;
 // seems to be an issue in production, check postman for 404 issue
 const SinglePost: NextPage<Props> = ({ post }) => {
   const [likes, setLikes] = useState({ likedByOwner: false, count: 0 });
+  const [postLikes, setPostLikes] = useState(false);
   const { id, title, content, tags, meta, author, slug, thumbnail, createdAt } =
     post;
 
@@ -42,6 +43,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
   }, [likes]);
 
   const handleOnLikeClick = async () => {
+    setPostLikes(true);
     try {
       // if user is not logged in, direct to sign in page
       if (!user) return await signIn("github");
@@ -51,6 +53,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
     } catch (error) {
       console.log(error);
     }
+    setPostLikes(false);
   };
 
   // fetches likes for each post that have already been made.
@@ -91,7 +94,8 @@ const SinglePost: NextPage<Props> = ({ post }) => {
           <LikeHeart
             liked={likes.likedByOwner}
             label={getLikeLabel()}
-            onClick={handleOnLikeClick}
+            onClick={!postLikes ? handleOnLikeClick : undefined}
+            busy={postLikes}
           />
         </div>
 
