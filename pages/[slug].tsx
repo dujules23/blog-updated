@@ -16,12 +16,15 @@ import { useCallback, useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { signIn } from "next-auth/react";
 import axios from "axios";
+import User from "@/models/User";
+import AuthorInfo from "@/components/common/AuthorInfo";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 // seems to be an issue in production, check postman for 404 issue
 const SinglePost: NextPage<Props> = ({ post }) => {
   const [likes, setLikes] = useState({ likedByOwner: false, count: 0 });
-  const { id, title, content, tags, meta, slug, thumbnail, createdAt } = post;
+  const { id, title, content, tags, meta, author, slug, thumbnail, createdAt } =
+    post;
 
   const user = useAuth();
 
@@ -91,6 +94,10 @@ const SinglePost: NextPage<Props> = ({ post }) => {
             onClick={handleOnLikeClick}
           />
         </div>
+
+        <div className="pt-10">
+          <AuthorInfo profile={JSON.parse(author)} />
+        </div>
         <Comments belongsTo={id} />
       </div>
     </DefaultLayout>
@@ -133,6 +140,7 @@ interface StaticPropsResponse {
     slug: string;
     thumbnail: string;
     createdAt: string;
+    author: string;
   };
 }
 
@@ -143,11 +151,33 @@ export const getStaticProps: GetStaticProps<
   try {
     // connect to database
     await dbConnect();
-    const post = await Post.findOne({ slug: params?.slug });
+    const post = await Post.findOne({ slug: params?.slug }).populate("author");
     if (!post) return { notFound: true };
 
-    const { _id, title, content, meta, slug, tags, thumbnail, createdAt } =
-      post;
+    const {
+      _id,
+      title,
+      content,
+      meta,
+      slug,
+      author,
+      tags,
+      thumbnail,
+      createdAt,
+    } = post;
+
+    const admin = await User.findOne({ role: "admin" });
+    const authorInfo = (author || admin) as any;
+
+    const postAuthor = {
+      id: authorInfo._id,
+      name: authorInfo.name,
+      avatar: authorInfo.avatar,
+      message: `This post is written by ${authorInfo.name}. ${
+        authorInfo.name.split(" ")[0]
+      } is a full stack Javascript developer. You can find him on X at @PercivalWright.`,
+    };
+
     return {
       props: {
         post: {
@@ -159,6 +189,7 @@ export const getStaticProps: GetStaticProps<
           tags,
           thumbnail: thumbnail?.url || "",
           createdAt: createdAt.toString(),
+          author: JSON.stringify(postAuthor),
         },
       },
       revalidate: 60,
