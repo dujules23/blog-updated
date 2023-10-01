@@ -31,7 +31,7 @@ const SinglePost: NextPage<Props> = ({ post }) => {
     if (likedByOwner && count === 1) return "You liked this post.";
     if (likedByOwner) return `You and ${count - 1} other likes this post.`;
 
-    if (count === 0) return "Like post.";
+    if (count === 0) return "Like this post.";
 
     // if (count === 1) return `${count} person liked this post.`;
 
