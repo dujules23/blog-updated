@@ -19,6 +19,8 @@ import axios from "axios";
 import User from "@/models/User";
 import AuthorInfo from "@/components/common/AuthorInfo";
 import Share from "@/components/common/Share";
+import Link from "next/link";
+import RelatedPosts from "@/components/common/RelatedPosts";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -39,8 +41,6 @@ const SinglePost: NextPage<Props> = ({ post }) => {
     createdAt,
     relatedPosts,
   } = post;
-
-  console.log(relatedPosts);
 
   const user = useAuth();
 
@@ -121,6 +121,29 @@ const SinglePost: NextPage<Props> = ({ post }) => {
         <div className="pt-10">
           <AuthorInfo profile={JSON.parse(author)} />
         </div>
+
+        {/* Made separate component for Related Posts */}
+        {/* Conditionally rendered to only show the component if there is a related post with an id, which is the first index of the array */}
+        {relatedPosts[0] && <RelatedPosts relatedPosts={relatedPosts} />}
+
+        {/* <div className="pt-5">
+          <h3 className="text-xl font-semibold bg-secondary-dark text-primary p-2 mb-4">
+            {" "}
+            Related Posts:
+          </h3>
+          <div className="flex flex-col space-y-4">
+            {relatedPosts.map((p) => {
+              return (
+                <Link key={p.id} href={p.slug}>
+                  <div className="font-semibold text-primary-dark dark:text-primary hover:underline">
+                    {p.title}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div> */}
+
         <Comments belongsTo={id} />
       </div>
     </DefaultLayout>
