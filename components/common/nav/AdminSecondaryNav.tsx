@@ -29,10 +29,17 @@ const AdminSecondaryNav: NextPage<Props> = () => {
     },
   ];
 
+  const handleSearchSubmit = (query: string) => {
+    if (!query.trim()) return;
+
+    // search
+    router.push("/admin/search?title=" + query);
+  };
+
   return (
     <div className="flex items-center justify-between">
       {/* search bar */}
-      <SearchBar />
+      <SearchBar onSubmit={handleSearchSubmit} />
       {/* options/ profile head */}
       <DropdownOptions
         head={<ProfileHead nameInitial="D" />}
