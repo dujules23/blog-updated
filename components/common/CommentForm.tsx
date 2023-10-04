@@ -38,6 +38,8 @@ const CommentForm: FC<Props> = ({
         duration: 3000,
         variant: "left-accent",
       });
+      // clears the input for comments after submission
+      editor.commands.clearContent();
     } else {
       toast({
         status: "error",
@@ -47,6 +49,7 @@ const CommentForm: FC<Props> = ({
         duration: 3000,
         variant: "left-accent",
       });
+      editor?.commands.clearContent();
     }
   };
 
