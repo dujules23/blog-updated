@@ -3,6 +3,7 @@ import { FC, useEffect } from "react";
 import editor from "../editor";
 import useEditorConfig from "@/hooks/useEditorConfig";
 import ActionButton from "./ActionButton";
+import { useToast } from "@chakra-ui/react";
 
 interface Props {
   title?: string;
@@ -22,13 +23,30 @@ const CommentForm: FC<Props> = ({
   visible = true,
 }): JSX.Element | null => {
   const { editor } = useEditorConfig({ placeholder: "Add your comment" });
-
+  const toast = useToast();
   const handleSubmit = () => {
     if (editor && !busy) {
       const value = editor?.getHTML();
       if (value === "<p></p>") return;
 
       onSubmit(value);
+      toast({
+        status: "success",
+        description: "Comment Submitted",
+        position: "top-right",
+        isClosable: true,
+        duration: 3000,
+        variant: "left-accent",
+      });
+    } else {
+      toast({
+        status: "error",
+        description: "Comment was not submitted, please try again.",
+        position: "top-right",
+        isClosable: true,
+        duration: 3000,
+        variant: "left-accent",
+      });
     }
   };
 

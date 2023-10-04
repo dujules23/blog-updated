@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@tippyjs/react": "^4.2.6",
     "@tiptap/extension-image": "^2.0.4",
     "@tiptap/extension-link": "^2.0.3",
@@ -31,6 +34,7 @@
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "formidable": "^3.5.0",
+    "framer-motion": "^10.16.4",
     "html-react-parser": "^4.2.2",
     "joi": "^17.9.2",
     "mongoose": "^7.4.3",
