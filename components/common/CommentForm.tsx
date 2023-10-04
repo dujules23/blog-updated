@@ -1,3 +1,5 @@
+"use client";
+
 import { Editor, EditorContent } from "@tiptap/react";
 import { FC, useEffect } from "react";
 import editor from "../editor";
