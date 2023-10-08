@@ -3,12 +3,15 @@ import DropdownOptions, { dropDownOptions } from "../DropdownOptions";
 import ProfileHead from "../ProfileHead";
 import { useRouter } from "next/router";
 import useDarkMode from "@/hooks/useDarkMode";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import SearchBar from "../SearchBar";
+import { UserProfile } from "@/utils/types";
 
 interface Props {}
 
 const AdminSecondaryNav: NextPage<Props> = () => {
+  const { data } = useSession();
+  const profile = data?.user as UserProfile | undefined;
   const router = useRouter();
   const { toggleTheme } = useDarkMode();
   const navigateToCreateNewPost = () => router.push("/admin/posts/create");
@@ -42,7 +45,12 @@ const AdminSecondaryNav: NextPage<Props> = () => {
       <SearchBar onSubmit={handleSearchSubmit} />
       {/* options/ profile head */}
       <DropdownOptions
-        head={<ProfileHead nameInitial="D" />}
+        head={
+          <ProfileHead
+            nameInitial={profile?.name[0].toUpperCase()}
+            avatar={profile?.avatar}
+          />
+        }
         options={options}
       />
     </div>
