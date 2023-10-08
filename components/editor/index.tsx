@@ -13,6 +13,8 @@ import axios from "axios";
 import SeoForm, { SeoResult } from "./SeoForm";
 import ActionButton from "../common/ActionButton";
 import ThumbnailSelector from "./ThumbnailSelector";
+import { useRouter } from "next/router";
+import { useToast } from "@chakra-ui/react";
 
 export interface FinalPost extends SeoResult {
   id?: string;
@@ -34,6 +36,9 @@ const Editor: FC<Props> = ({
   busy = false,
   onSubmit,
 }): JSX.Element => {
+  const router = useRouter();
+  const toast = useToast();
+  const [submitting, setSubmitting] = useState(false);
   const [selectionRange, setSelectionRange] = useState<Range>();
   const [showGallery, setShowGallery] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -115,9 +120,39 @@ const Editor: FC<Props> = ({
       .run();
   };
 
-  const handleSubmit = () => {
-    if (!editor) return;
-    onSubmit({ ...post, content: editor.getHTML() });
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    const { title, meta, slug } = post;
+    try {
+      console.log(post);
+      if (!editor) return;
+      if (title === "" || slug === "" || meta === "") {
+        toast({
+          status: "error",
+          description: "Your post is missing content. Please check all fields",
+          position: "top-right",
+          isClosable: true,
+          duration: 2000,
+          variant: "left-accent",
+        });
+        setSubmitting(false);
+      } else {
+        await onSubmit({ ...post, content: editor.getHTML() });
+        setSubmitting(false);
+        router.push("/admin/posts");
+        toast({
+          status: "success",
+          description: "Post submitted.",
+          position: "top-right",
+          isClosable: true,
+          duration: 2000,
+          variant: "left-accent",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setSubmitting(false);
+    }
   };
 
   // onChange functions
@@ -157,7 +192,7 @@ const Editor: FC<Props> = ({
             <ThumbnailSelector onChange={updateThumbnail} />
             <div className="inline-block">
               <ActionButton
-                busy={busy}
+                busy={submitting}
                 title={btnTitle}
                 onClick={handleSubmit}
               />
