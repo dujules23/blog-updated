@@ -44,7 +44,7 @@ const UserNav: FC<Props> = (props): JSX.Element => {
     : defaultOptions;
 
   return (
-    <div className="flex items-center justify-between bg-primary-dark p-3">
+    <div className="flex items-center justify-between bg-primary-dark p-4">
       {/* Logo and Title */}
       <Link href="/">
         <div className="flex items-center space-x-2 text-highlight-dark">
