@@ -24,7 +24,7 @@ import RelatedPosts from "@/components/common/RelatedPosts";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const host = "http://localhost:3000";
+const host = "http://pupil-to-master-blog.vercel.app";
 // seems to be an issue in production, check postman for 404 issue
 const SinglePost: NextPage<Props> = ({ post }) => {
   const [likes, setLikes] = useState({ likedByOwner: false, count: 0 });
