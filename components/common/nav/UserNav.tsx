@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Logo from "../Logo";
 import { HiLightBulb } from "react-icons/hi";
+import { BsFillInfoCircleFill } from "react-icons/bs";
 import { APP_NAME } from "../AppHead";
 import Link from "next/link";
 import { GitHubAuthButton } from "@/components/button";
@@ -52,8 +53,14 @@ const UserNav: FC<Props> = (props): JSX.Element => {
           <span className="md:text-xl font-semibold">{APP_NAME}</span>
         </div>
       </Link>
-      {/* Dark Mode Button */}
+      {/* Dark Mode Button & Info Button */}
       <div className="flex items-center space-x-5">
+        <button
+          onClick={() => {}}
+          className="dark:text-secondary-dark text-secondary-light hover:text-yellow-200 dark:hover:text-yellow-200 transition ease-in-out"
+        >
+          <BsFillInfoCircleFill size={34} />
+        </button>
         <button
           onClick={toggleTheme}
           className="dark:text-secondary-dark text-secondary-light"
