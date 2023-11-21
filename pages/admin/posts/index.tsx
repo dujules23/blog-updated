@@ -12,7 +12,6 @@ import {
 } from "next";
 import Link from "next/link";
 import { useState } from "react";
-import ConfirmModal from "@/components/common/ConfirmModal";
 import { filterPosts } from "@/utils/helper";
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Logo from "../Logo";
 import { HiLightBulb } from "react-icons/hi";
 import { BsFillInfoCircleFill } from "react-icons/bs";
@@ -11,6 +11,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { UserProfile } from "@/utils/types";
 import useDarkMode from "@/hooks/useDarkMode";
+import WelcomeModal from "../WelcomeModal";
 
 interface Props {}
 
@@ -24,6 +25,7 @@ const defaultOptions: dropDownOptions = [
 ];
 
 const UserNav: FC<Props> = (props): JSX.Element => {
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { data, status } = useSession();
   const isAuth = status === "authenticated";
@@ -56,7 +58,7 @@ const UserNav: FC<Props> = (props): JSX.Element => {
       {/* Dark Mode Button & Info Button */}
       <div className="flex items-center space-x-5">
         <button
-          onClick={() => {}}
+          onClick={() => setIsOpen(true)}
           className="dark:text-secondary-dark text-secondary-light hover:text-yellow-200 dark:hover:text-yellow-200 transition ease-in-out"
         >
           <BsFillInfoCircleFill size={34} />
@@ -67,6 +69,16 @@ const UserNav: FC<Props> = (props): JSX.Element => {
         >
           <HiLightBulb size={34} />
         </button>
+
+        {/* Info modal */}
+        {isOpen && (
+          <WelcomeModal
+            title="Welcome to my Blog!"
+            visible={isOpen}
+            onClose={() => setIsOpen(false)}
+            onCancel={() => setIsOpen(false)}
+          />
+        )}
 
         {isAuth ? (
           <DropdownOptions
